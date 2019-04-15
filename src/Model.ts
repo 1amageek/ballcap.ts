@@ -26,7 +26,7 @@ export class Model implements Modelable {
 	}
 
 	public modelName(): string {
-		return this.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
+		return this.constructor.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
 	}
 
 	public path(): string {
@@ -37,6 +37,9 @@ export class Model implements Modelable {
 		return firestore.collection(this.path())
 	}
 
+	public static init<T extends typeof Model>(this: T): InstanceType<T> {
+        return (new this()) as InstanceType<T>
+    }
 	//
 
 	public codingKeys(): { [localKey: string]: string } {
@@ -54,8 +57,8 @@ export class Model implements Modelable {
 		return Reflect.getMetadata(FieldSymbol, this) || []
 	}
 
-	private _data!: FirebaseFirestore.DocumentData
-
+	_data!: { [feild: string]: any }
+	
 	private _defineField<T extends keyof ThisType<this>>(key: string, value?: any) {
 		const descriptor: PropertyDescriptor = {
 			enumerable: true,

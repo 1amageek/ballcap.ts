@@ -3,7 +3,7 @@ import { Field } from '../src/Field'
 import { } from "reflect-metadata"
 
 
-describe("Document Fields", () => {
+describe("Model Fields", () => {
 
     test("string", async () => {
 		class Doc extends Model {
