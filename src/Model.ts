@@ -1,15 +1,7 @@
 import * as FirebaseFirestore from '@google-cloud/firestore'
-import { Referenceable } from './Referenceable'
-import { Field, FieldSymbol } from './Field'
-import { Batch } from './Batch'
 import { firestore } from './index'
-import { } from "reflect-metadata"
-
-export { Field }
-
-export interface Modelable {
-	
-}
+import { Modelable } from './Modelable'
+import { FieldSymbol } from './Field'
 
 export class Model implements Modelable {
 
@@ -71,6 +63,9 @@ export class Model implements Modelable {
 			get: () => {
 				if (this._data) {
 					const codingKey = this.codingKeys()[key]
+					if (this._data[codingKey] === undefined) {
+						return null
+					}
 					return this._data[codingKey]
 				} else {
 					return undefined
@@ -81,7 +76,7 @@ export class Model implements Modelable {
 					const codingKey = this.codingKeys()[key]
 					this._data[codingKey] = newValue
 				} else {
-					throw Error(`[Ballcap: Document] This document has not data. key: ${key} value: ${newValue}`)
+					fail(`[Ballcap: Document] This document has not data. key: ${key} value: ${newValue}`)
 				}
 			}
 		}
@@ -95,9 +90,7 @@ export class Model implements Modelable {
 		for (const field of fields) {
 			this._defineField(field)
 		}
-		if (data) {
-			this._data = data
-		}
+		this._data = data || {}
 	}
 }
 

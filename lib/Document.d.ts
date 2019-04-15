@@ -1,33 +1,31 @@
 import * as FirebaseFirestore from '@google-cloud/firestore';
 import { Referenceable } from './Referenceable';
-export declare type Modelable = FirebaseFirestore.DocumentData;
-export declare namespace Modelable {
+import { Field } from './Field';
+export { Field };
+export interface Documentable extends Referenceable {
+    data?: FirebaseFirestore.DocumentData;
 }
-export interface Documentable<Model extends Modelable> extends Referenceable {
-    data?: Model;
-}
-export declare class Document<Model extends Modelable> implements Documentable<Model> {
+export declare class Document implements Documentable {
     id: string;
-    data?: Model;
+    data?: FirebaseFirestore.DocumentData;
     documentReference: FirebaseFirestore.DocumentReference;
     snapshot?: FirebaseFirestore.DocumentSnapshot;
     createdAt: FirebaseFirestore.Timestamp;
     updatedAt: FirebaseFirestore.Timestamp;
-    private _type;
-    static collectionReference(): FirebaseFirestore.CollectionReference;
     static version(): string;
     static modelName(): string;
     static path(): string;
-    private modelName;
-    private path;
-    private collectionReference;
-    constructor(type: {
-        new (): Model;
-    }, id?: string, data?: {
+    static collectionReference(): FirebaseFirestore.CollectionReference;
+    version(): string;
+    modelName(): string;
+    path(): string;
+    collectionReference(): FirebaseFirestore.CollectionReference;
+    allFields(): string[];
+    private _defineField;
+    constructor(id?: string, data?: {
         [key: string]: any;
     }, reference?: FirebaseFirestore.DocumentReference);
-    init(id: string, data: Model): void;
-    save(): Promise<any>;
-    update(): Promise<any>;
-    delete(): Promise<any>;
+    save(): Promise<void>;
+    update(): Promise<void>;
+    delete(): Promise<void>;
 }

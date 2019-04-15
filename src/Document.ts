@@ -7,10 +7,6 @@ import { } from "reflect-metadata"
 
 export { Field }
 
-export interface Modelable {
-	
-}
-
 export interface Documentable extends Referenceable {
 	data?: FirebaseFirestore.DocumentData
 }
@@ -84,7 +80,7 @@ export class Document implements Documentable {
 				if (this.data) {
 					this.data[key] = newValue
 				} else {
-					throw Error(`[Ballcap: Document] This document has not data. key: ${key} value: ${newValue}`)
+					fail(`[Ballcap: Document] This document has not data. key: ${key} value: ${newValue}`)
 				}
 			}
 		}
