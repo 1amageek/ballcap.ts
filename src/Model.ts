@@ -28,16 +28,26 @@ export class Model implements Modelable {
 			const descriptor = Object.getOwnPropertyDescriptor(this, field)
 			if (descriptor && descriptor.get) {
 				const value = descriptor.get()
-				if (value instanceof Model) {
-					data[field] = value.data()
-				} else {
-					data[field] = value
-				}
+				data[field] = this._parse(value)
 			} else {
 				data[field] = null
 			}	
 		}
 		return data
+	}
+
+	private _parse(value: any): any {
+		if (value instanceof Model) {
+			return value.data()
+		} else if (value instanceof Array) { 
+			let container = []
+			for (const i of value) {
+				container.push(this._parse(i))
+			}
+			return container
+		} else {
+			return value
+		} 
 	}
 
 	private _defineField(key: string, value?: any) {

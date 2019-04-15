@@ -301,6 +301,43 @@ describe("Model Fields", () => {
 		})
 	}, 100)
 
+	test("file[]", async () => {
+		class Doc extends Model {
+			@Field f: File[] = [new File({name: "name", mimeType: "mimeType", path: "path"})]
+		}
+		const doc: Doc = new Doc()
+		expect(doc.f).toEqual([new File({name: "name", mimeType: "mimeType", path: "path"})])
+		expect(doc.data()).toEqual({
+			"f": [{
+				"name": "name", "mimeType": "mimeType", "path": "path", "url": null, "additionalData": {}
+			}]
+		})
+	}, 100)
+
+	test("file[]?", async () => {
+		class Doc extends Model {
+			@Field f?: File[]
+		}
+		const doc: Doc = new Doc()
+		expect(doc.f).toEqual(null)
+		expect(doc.data()).toEqual({
+			"f": null
+		})
+	}, 100)
+
+	test("file[]!", async () => {
+		class Doc extends Model {
+			@Field f?: File[] = [new File({name: "name", mimeType: "mimeType", path: "path"})]
+		}
+		const doc: Doc = new Doc()
+		expect(doc.f).toEqual([new File({name: "name", mimeType: "mimeType", path: "path"})])
+		expect(doc.data()).toEqual({
+			"f": [{
+				"name": "name", "mimeType": "mimeType", "path": "path", "url": null, "additionalData": {}
+			}]
+		})
+	}, 100)
+
 	test("model", async () => {
 		class Sub extends Model {
 			@Field s: string = "s"
