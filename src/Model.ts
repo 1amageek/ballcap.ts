@@ -1,49 +1,14 @@
-import * as FirebaseFirestore from '@google-cloud/firestore'
-import { firestore } from './index'
 import { Modelable } from './Modelable'
 import { FieldSymbol } from './Field'
 
 export class Model implements Modelable {
 
-	public static version(): string {
-		return "1"
-	}
-
-	public static modelName(): string {
-		return this.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
-	}
-
-	public static path(): string {
-		return `version/${this.version()}/${this.modelName()}`
-	}
-
-	public static collectionReference(): FirebaseFirestore.CollectionReference {
-		return firestore.collection(this.path())
-	}
-
-	public version(): string {
-		return "1"
-	}
-
-	public modelName(): string {
-		return this.constructor.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
-	}
-
-	public path(): string {
-		return `version/${this.version()}/${this.modelName()}`
-	}
-
-	public collectionReference(): FirebaseFirestore.CollectionReference {
-		return firestore.collection(this.path())
-	}
-
 	public static init<T extends typeof Model>(this: T): InstanceType<T> {
         return (new this()) as InstanceType<T>
-    }
-	//
-
+	}
+	
 	public codingKeys(): { [localKey: string]: string } {
-		const fields = this.allFields()
+		const fields = this.fields()
 		const keys: { [key: string]: string } = {}
 		for (const field of fields) {
 			keys[field] = field
@@ -51,15 +16,31 @@ export class Model implements Modelable {
 		return keys
 	}
 
-	//
-
-	public allFields(): string[] {
+	public fields(): string[] {
 		return Reflect.getMetadata(FieldSymbol, this) || []
 	}
 
-	_data!: { [feild: string]: any }
-	
-	private _defineField<T extends keyof ThisType<this>>(key: string, value?: any) {
+	protected _data!: { [feild: string]: any }
+
+	public data(): FirebaseFirestore.DocumentData {
+		let data: { [feild: string]: any } = {}
+		for (const field of this.fields()) {
+			const descriptor = Object.getOwnPropertyDescriptor(this, field)
+			if (descriptor && descriptor.get) {
+				const value = descriptor.get()
+				if (value instanceof Model) {
+					data[field] = value.data()
+				} else {
+					data[field] = value
+				}
+			} else {
+				data[field] = null
+			}	
+		}
+		return data
+	}
+
+	private _defineField(key: string, value?: any) {
 		const descriptor: PropertyDescriptor = {
 			enumerable: true,
 			configurable: true,
@@ -86,11 +67,8 @@ export class Model implements Modelable {
 		Object.defineProperty(this, key, descriptor)
 	}
 
-	//
-
 	public constructor(data?: { [key: string]: any }) {
-		const fields: string[] = Reflect.getMetadata(FieldSymbol, this) || []
-		for (const field of fields) {
+		for (const field of this.fields()) {
 			this._defineField(field)
 		}
 		this._data = data || {}

@@ -10,14 +10,12 @@ import { } from "reflect-metadata"
 export { Field }
 
 export interface Documentable extends Referenceable {
-	data?: FirebaseFirestore.DocumentData
+	data(): FirebaseFirestore.DocumentData
 }
 
-export class Base<T extends Model> implements Documentable {
+export class Document extends Model implements Documentable {
 
 	public id: string
-
-	public data?: T
 
 	public documentReference: FirebaseFirestore.DocumentReference
 
@@ -26,8 +24,6 @@ export class Base<T extends Model> implements Documentable {
 	public createdAt: FirebaseFirestore.Timestamp = FirebaseFirestore.Timestamp.now()
 
 	public updatedAt: FirebaseFirestore.Timestamp = FirebaseFirestore.Timestamp.now()
-
-	// 
 
 	public static version(): string {
 		return "1"
@@ -61,44 +57,30 @@ export class Base<T extends Model> implements Documentable {
 		return firestore.collection(this.path())
 	}
 
-	//
-
-	public constructor(type?: { new(): T }, reference?: string | FirebaseFirestore.DocumentReference, data?: T) {
-
+	/**
+	 * constructor
+	 */
+	public constructor(reference?: string | FirebaseFirestore.DocumentReference, data?: { [field: string]: any }) {
+		super(data)
+		let ref: FirebaseFirestore.DocumentReference | undefined = undefined
 		if (reference instanceof FirebaseFirestore.DocumentReference) {
 			ref = reference
-		} else {
-			ref = firestore.doc(`${type.path()}/${reference}`)
+		} else if (typeof reference === "string") {
+			ref = firestore.doc(`${this.path()}/${reference}`)
 		}
-
-		if (id && data && reference) {
-			this.documentReference = reference
-			this.data = data
-			this.id = id
-			if (data._data) {
-				this.createdAt = data._data["createdAt"] || FirebaseFirestore.Timestamp.now()
-				this.updatedAt = data._data["updatedAt"] || FirebaseFirestore.Timestamp.now()
-			}
-		} else if (id && data) {
-			this.data = data
-			this.documentReference = this.collectionReference().doc(id)
-			this.id = id
-			if (data._data) {
-				this.createdAt = data._data["createdAt"] || FirebaseFirestore.Timestamp.now()
-				this.updatedAt = data._data["updatedAt"] || FirebaseFirestore.Timestamp.now()
-			}
-		} else if (id) {
-			this.documentReference = this.collectionReference().doc(id)
-			this.id = id
-			if (type) {
-				this.data = new type()
-			}
+		if (ref && data) {
+			this.documentReference = ref
+			this.id = ref.id
+			this.createdAt = data["createdAt"] || FirebaseFirestore.Timestamp.now()
+			this.updatedAt = data["updatedAt"] || FirebaseFirestore.Timestamp.now()
+		} else if (data) {
+			this.documentReference = this.collectionReference().doc()
+			this.id = this.documentReference.id
+			this.createdAt = data["createdAt"] || FirebaseFirestore.Timestamp.now()
+			this.updatedAt = data["updatedAt"] || FirebaseFirestore.Timestamp.now()
 		} else {
 			this.documentReference = this.collectionReference().doc()
 			this.id = this.documentReference.id
-			if (type) {
-				this.data = new type()
-			}
 		}
 	}
 
@@ -125,14 +107,12 @@ export class Base<T extends Model> implements Documentable {
 		if (reference instanceof FirebaseFirestore.DocumentReference) {
 			ref = reference
 		} else {
-			ref = firestore.doc(`${type.path()}/${reference}`)
+			ref = firestore.doc(`${this.path()}/${reference}`)
 		}
 		try {
 			const snapshot: FirebaseFirestore.DocumentSnapshot = await ref.get()
 			if (snapshot.exists) {
-				const model = type.init()
-				const document = new this(type, ref.id, model)
-				return document
+				return new this(snapshot.ref, snapshot.data())
 			} else {
 				return undefined
 			}
