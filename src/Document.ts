@@ -1,13 +1,9 @@
 import * as FirebaseFirestore from '@google-cloud/firestore'
 import { Referenceable } from './Referenceable'
-import { Field } from './Field'
 import { Batch } from './Batch'
 import { Model } from './Model'
 import { firestore } from './index'
 import { } from "reflect-metadata"
-
-
-export { Field }
 
 export interface Documentable extends Referenceable {
 	data(): FirebaseFirestore.DocumentData
@@ -55,6 +51,10 @@ export class Document extends Model implements Documentable {
 
 	public collectionReference(): FirebaseFirestore.CollectionReference {
 		return firestore.collection(this.path())
+	}
+
+	public subCollection(path: string) {
+		return this.documentReference.collection(path)
 	}
 
 	/**

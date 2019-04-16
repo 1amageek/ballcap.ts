@@ -6,6 +6,18 @@ export class Model implements Modelable {
 	public static init<T extends typeof Model>(this: T): InstanceType<T> {
         return (new this()) as InstanceType<T>
 	}
+
+	// static getInstance<T>(context: Object, name: string, ...args: any[]) : T {
+    //     var instance = Object.create(context[name].prototype);
+    //     instance.constructor.apply(instance, args);
+    //     return <T> instance;
+    // }
+
+	public static from<T extends Model>(data: { [feild: string]: any }): T {
+		const model = new this()
+		model._set(data)
+        return model as T
+	}
 	
 	public codingKeys(): { [localKey: string]: string } {
 		const fields = this.fields()
@@ -20,7 +32,32 @@ export class Model implements Modelable {
 		return Reflect.getMetadata(FieldSymbol, this) || []
 	}
 
-	protected _data!: { [feild: string]: any }
+	protected _data: { [feild: string]: any } = {}
+
+	private _set(data: { [feild: string]: any }) {
+		for (const field of this.fields()) {
+			const value = data[field]
+			if (value === undefined) {
+				this._data[field] = null
+			} else {
+				this._data[field] = this._decode(value)
+			}
+		}
+	}
+
+	private _decode(value: any): any {
+		if (value instanceof Model) {
+			return value
+		} else if (value instanceof Array) {
+			let container = []
+			for (const i of value) {
+				container.push(this._decode(i))
+			}
+			return container
+		} else {
+			return value
+		}
+	}
 
 	public data(): FirebaseFirestore.DocumentData {
 		let data: { [feild: string]: any } = {}
@@ -28,7 +65,7 @@ export class Model implements Modelable {
 			const descriptor = Object.getOwnPropertyDescriptor(this, field)
 			if (descriptor && descriptor.get) {
 				const value = descriptor.get()
-				data[field] = this._parse(value)
+				data[field] = this._encode(value)
 			} else {
 				data[field] = null
 			}	
@@ -36,13 +73,13 @@ export class Model implements Modelable {
 		return data
 	}
 
-	private _parse(value: any): any {
+	private _encode(value: any): any {
 		if (value instanceof Model) {
 			return value.data()
 		} else if (value instanceof Array) { 
 			let container = []
 			for (const i of value) {
-				container.push(this._parse(i))
+				container.push(this._encode(i))
 			}
 			return container
 		} else {
@@ -77,11 +114,10 @@ export class Model implements Modelable {
 		Object.defineProperty(this, key, descriptor)
 	}
 
-	public constructor(data?: { [key: string]: any }) {
+	public constructor() {
 		for (const field of this.fields()) {
 			this._defineField(field)
 		}
-		this._data = data || {}
 	}
 }
 
