@@ -1,19 +1,60 @@
-import { Model } from "./Model"
-import { Field } from './Field'
 
-export class File extends Model {
+export type FileType = {
+    mimeType: string
+    name: string
+    path: string
+    url: string | null
+    additionalData: { [key: string]: any }
+}
 
-    @Field public mimeType!: string
+export class File {
 
-	@Field public name!: string
-	
-	@Field public path!: string
-
-    @Field public url?: string
-
-    @Field public additionalData: { [key: string]: any } = {}
-
-    public constructor() {
-        super()
+    public static is(arg: { [key: string]: any }): boolean {
+        if (arg instanceof Object) {
+            return Object.keys(arg).length === 4 &&
+                arg.hasOwnProperty('mimeType') &&
+                arg.hasOwnProperty('name') &&
+                arg.hasOwnProperty('path') &&
+                arg.hasOwnProperty('url') &&
+                arg.hasOwnProperty('additionalData')
+        } else {
+            return false
+        }
     }
+
+    public static from(data: FileType): File {
+        const file: File = new File()
+        file._set(data)
+        return file
+    }
+
+    public mimeType!: string
+
+    public name!: string
+
+    public path!: string
+
+    public url: string | null = null
+
+    public additionalData: { [key: string]: any } = {}
+
+    public constructor() { }
+
+    private _set(data: FileType) {
+        this.mimeType = data.mimeType
+        this.name = data.name
+        this.path = data.path
+        this.url = data.url
+        this.additionalData = data.additionalData
+    }
+
+    public data(): FirebaseFirestore.DocumentData {
+		return {
+            mimeType: this.mimeType,
+            name: this.name,
+            path: this.path,
+            url: this.url,
+            additionalData: this.additionalData
+        }
+	}
 }

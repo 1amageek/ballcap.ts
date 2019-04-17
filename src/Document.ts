@@ -61,7 +61,7 @@ export class Document extends Model implements Documentable {
 	 * constructor
 	 */
 	public constructor(reference?: string | FirebaseFirestore.DocumentReference, data?: { [field: string]: any }) {
-		super(data)
+		super()
 		let ref: FirebaseFirestore.DocumentReference | undefined = undefined
 		if (reference instanceof FirebaseFirestore.DocumentReference) {
 			ref = reference

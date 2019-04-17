@@ -1,18 +1,27 @@
-// interface Foo {
+import { Model } from "../src/Model"
+import { Codable } from "../src/Field"
+import { } from "reflect-metadata"
 
-// 	name(): string
-// }
+export class Foo extends Model {
 
-// class Bar implements Foo {
-// 	name(): string {
-// 		return this.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
-// 	}
-// }
+}
+@Codable({
+	name: Foo
+})
+class Bar extends Model {
+
+}
 
 
-// describe("main", async () => {
-//     test("main", async () => {
-		
-//     }, 10000000)
-// })
+describe("main", async () => {
+	test("main", async () => {
+
+		const bar: Bar = new Bar()
+
+
+		console.log(bar)
+
+
+	}, 10000000)
+})
 
