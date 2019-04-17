@@ -28,11 +28,11 @@ export class File {
         return file
     }
 
-    public mimeType!: string
+    public mimeType: string = ""
 
-    public name!: string
+    public name: string = ""
 
-    public path!: string
+    public path: string = ""
 
     public url: string | null = null
 

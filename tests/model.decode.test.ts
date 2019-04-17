@@ -2,7 +2,7 @@ import { Model } from '../src/Model'
 import { File } from '../src/File'
 import { Field } from '../src/Field'
 import { } from "reflect-metadata"
-import { Codable } from '../src/Codable';
+import { Codable } from '../src/Codable'
 
 
 describe("Model Fields", () => {
@@ -491,8 +491,6 @@ describe("Model Fields", () => {
 			}
 		}
 		const doc: Doc = Doc.from(data)
-		console.log(doc.model)
-		console.log(new Sub())
 		expect(doc.model).toEqual(Sub.from({s: "s"}))
 		expect(doc.model.s).toEqual("s")
 	}, 100)

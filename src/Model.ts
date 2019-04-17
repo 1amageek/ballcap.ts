@@ -32,7 +32,8 @@ export class Model implements Modelable {
 
 	private _set(data: { [feild: string]: any }) {
 		for (const field of this.fields()) {
-			const value = data[field]
+			const codingKey = this.codingKeys()[field]
+			const value = data[codingKey]
 			if (value === undefined) {
 				this._data[field] = null
 			} else {
@@ -68,12 +69,13 @@ export class Model implements Modelable {
 	public data(): FirebaseFirestore.DocumentData {
 		let data: { [feild: string]: any } = {}
 		for (const field of this.fields()) {
+			const codingKey = this.codingKeys()[field]
 			const descriptor = Object.getOwnPropertyDescriptor(this, field)
 			if (descriptor && descriptor.get) {
 				const value = descriptor.get()
-				data[field] = this._encode(value)
+				data[codingKey] = this._encode(value)
 			} else {
-				data[field] = null
+				data[codingKey] = null
 			}
 		}
 		return data
@@ -99,19 +101,17 @@ export class Model implements Modelable {
 			configurable: true,
 			get: () => {
 				if (this._data) {
-					const codingKey = this.codingKeys()[key]
-					if (this._data[codingKey] === undefined) {
+					if (this._data[key] === undefined) {
 						return null
 					}
-					return this._data[codingKey]
+					return this._data[key]
 				} else {
 					return undefined
 				}
 			},
 			set: (newValue) => {
 				if (this._data) {
-					const codingKey = this.codingKeys()[key]
-					this._data[codingKey] = newValue
+					this._data[key] = newValue
 				} else {
 					fail(`[Ballcap: Document] This document has not data. key: ${key} value: ${newValue}`)
 				}
