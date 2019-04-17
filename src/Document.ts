@@ -1,25 +1,17 @@
 import * as FirebaseFirestore from '@google-cloud/firestore'
 import { Referenceable } from './Referenceable'
-import { Field, FieldSymbol } from './Field'
 import { Batch } from './Batch'
+import { Model } from './Model'
 import { firestore } from './index'
 import { } from "reflect-metadata"
 
-export { Field }
-
-export interface Modelable {
-	
-}
-
 export interface Documentable extends Referenceable {
-	data?: FirebaseFirestore.DocumentData
+	data(): FirebaseFirestore.DocumentData
 }
 
-export class Document implements Documentable {
+export class Document extends Model implements Documentable {
 
 	public id: string
-
-	public data?: FirebaseFirestore.DocumentData
 
 	public documentReference: FirebaseFirestore.DocumentReference
 
@@ -28,8 +20,6 @@ export class Document implements Documentable {
 	public createdAt: FirebaseFirestore.Timestamp = FirebaseFirestore.Timestamp.now()
 
 	public updatedAt: FirebaseFirestore.Timestamp = FirebaseFirestore.Timestamp.now()
-
-	// 
 
 	public static version(): string {
 		return "1"
@@ -52,7 +42,7 @@ export class Document implements Documentable {
 	}
 
 	public modelName(): string {
-		return this.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
+		return this.constructor.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
 	}
 
 	public path(): string {
@@ -63,54 +53,34 @@ export class Document implements Documentable {
 		return firestore.collection(this.path())
 	}
 
-	//
-
-	public allFields(): string[] {
-		return Reflect.getMetadata(FieldSymbol, this) || []
+	public subCollection(path: string) {
+		return this.documentReference.collection(path)
 	}
 
-	private _defineField<T extends keyof ThisType<this>>(key: string, value?: any) {
-		const descriptor: PropertyDescriptor = {
-			enumerable: true,
-			configurable: true,
-			get: () => {
-				if (this.data) {
-					return this.data[key]
-				} else {
-					return undefined
-				}
-			},
-			set: (newValue) => {
-				if (this.data) {
-					this.data[key] = newValue
-				} else {
-					throw Error(`[Ballcap: Document] This document has not data. key: ${key} value: ${newValue}`)
-				}
-			}
+	/**
+	 * constructor
+	 */
+	public constructor(reference?: string | FirebaseFirestore.DocumentReference, data?: { [field: string]: any }) {
+		super()
+		let ref: FirebaseFirestore.DocumentReference | undefined = undefined
+		if (reference instanceof FirebaseFirestore.DocumentReference) {
+			ref = reference
+		} else if (typeof reference === "string") {
+			ref = firestore.doc(`${this.path()}/${reference}`)
 		}
-		Object.defineProperty(this, key, descriptor)
-	}
-
-	//
-
-	public constructor(id?: string, data?: { [key: string]: any }, reference?: FirebaseFirestore.DocumentReference) {
-		const fields: string[] = Reflect.getMetadata(FieldSymbol, this) || []
-		for (const field of fields) {
-			this._defineField(field)
-		}
-		if (id) {
-			this.documentReference = this.collectionReference().doc(id)
-			this.id = id
+		if (ref && data) {
+			this.documentReference = ref
+			this.id = ref.id
+			this.createdAt = data["createdAt"] || FirebaseFirestore.Timestamp.now()
+			this.updatedAt = data["updatedAt"] || FirebaseFirestore.Timestamp.now()
+		} else if (data) {
+			this.documentReference = this.collectionReference().doc()
+			this.id = this.documentReference.id
+			this.createdAt = data["createdAt"] || FirebaseFirestore.Timestamp.now()
+			this.updatedAt = data["updatedAt"] || FirebaseFirestore.Timestamp.now()
 		} else {
 			this.documentReference = this.collectionReference().doc()
 			this.id = this.documentReference.id
-		}
-		if (data) {
-			this.data = data
-		}
-		if (reference) {
-			this.documentReference = reference
-			this.id = reference.id
 		}
 	}
 
@@ -130,6 +100,25 @@ export class Document implements Documentable {
 		const batch = new Batch()
 		batch.delete(this)
 		await batch.commit()
+	}
+
+	public static async get(type: typeof Model & { new(): Model }, reference: string | FirebaseFirestore.DocumentReference) {
+		let ref: FirebaseFirestore.DocumentReference
+		if (reference instanceof FirebaseFirestore.DocumentReference) {
+			ref = reference
+		} else {
+			ref = firestore.doc(`${this.path()}/${reference}`)
+		}
+		try {
+			const snapshot: FirebaseFirestore.DocumentSnapshot = await ref.get()
+			if (snapshot.exists) {
+				return new this(snapshot.ref, snapshot.data())
+			} else {
+				return undefined
+			}
+		} catch (error) {
+			throw error
+		}
 	}
 }
 

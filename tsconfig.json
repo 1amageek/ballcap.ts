@@ -6,6 +6,7 @@
     "outDir": "lib",
     "sourceMap": true,
     "strict": true,
+    "experimentalDecorators": true,
     "target": "es2015"
   },
   "compileOnSave": true,
