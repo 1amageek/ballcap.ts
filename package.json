@@ -21,19 +21,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/1amageek/pring-admin.ts.git"
+    "url": "git+https://github.com/1amageek/ballcap-admin.ts.git"
   },
   "keywords": [
     "firestore",
     "firebase",
-    "pring",
+    "ballcap",
     "model",
     "typescript"
   ],
   "author": "1amageek",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/1amageek/pring-admin.ts/issues"
+    "url": "https://github.com/1amageek/ballcap-admin.ts/issues"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
