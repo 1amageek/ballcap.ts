@@ -1,3 +1,4 @@
+import * as firebase from 'firebase'
 import { Model } from '../src/Model'
 import { File } from '../src/File'
 import { Field } from '../src/Field'
@@ -371,5 +372,30 @@ describe("Model Fields", () => {
 		const doc: Doc = new Doc()
 		expect(doc.model).toEqual(new Sub())
 		expect(doc.model!.s).toEqual("s")
+	}, 100)
+
+	test("FieldValue", async () => {
+		class Doc extends Model {
+			@Field t: firebase.firestore.Timestamp | firebase.firestore.FieldValue = firebase.firestore.FieldValue.serverTimestamp()
+		}
+
+		const doc: Doc = new Doc()
+		expect(doc.t).toEqual(firebase.firestore.FieldValue.serverTimestamp())
+	}, 100)
+
+	test("FieldValue", async () => {
+		class Doc extends Model {
+			@Field t?: firebase.firestore.Timestamp | firebase.firestore.FieldValue
+		}
+		const doc: Doc = new Doc()
+		expect(doc.t).toEqual(null)
+	}, 100)
+
+	test("FieldValue", async () => {
+		class Doc extends Model {
+			@Field t?: firebase.firestore.Timestamp | firebase.firestore.FieldValue = firebase.firestore.FieldValue.serverTimestamp()
+		}
+		const doc: Doc = new Doc()
+		expect(doc.t).toEqual(firebase.firestore.FieldValue.serverTimestamp())
 	}, 100)
 })
