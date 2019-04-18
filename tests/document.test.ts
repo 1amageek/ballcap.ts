@@ -3,7 +3,6 @@ import * as Ballcap from "../src/index"
 import { Document } from '../src/Document'
 import { Field } from '../src/Field'
 import { } from "reflect-metadata"
-import { Codable } from '../src/Codable';
 
 const app = firebase.initializeAdminApp({
 	projectId: "test-project"
