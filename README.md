@@ -12,7 +12,15 @@ export class User extends Document {
 }
 ```
 
-## CRUD
+## Usage
+
+### Initialize
+To use Ballcap, you need to initialize it.
+```typescript
+Ballcap.initialize(app.firestore())
+```
+
+### CRUD
 
 __Document__
 ```typescript
@@ -46,7 +54,7 @@ batch.save(user)
 await batch.commit()
 ```
 
-### Retrive document
+#### Retrive document
 
 ```typescript
 // with id
@@ -56,13 +64,13 @@ const user?: User = await User.get("id")
 const user?: User = await User.get(firestore.doc("a/a"))
 ```
 
-#### Convert from DocumentSnapshot
+##### Convert from DocumentSnapshot
 
 ```typescript
 const user: User = await User.fromSnapshot(documentSnapshot)
 ```
 
-## Field
+### Field
 
 A Field can have another Document. In that case, use the `@Codable` decorator.
 
