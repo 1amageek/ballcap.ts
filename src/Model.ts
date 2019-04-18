@@ -5,14 +5,10 @@ import { File } from './File'
 
 export class Model implements Modelable {
 
-	public static init<T extends typeof Model>(this: T): InstanceType<T> {
-		return (new this()) as InstanceType<T>
-	}
-
 	public static from<T extends Model>(data: { [feild: string]: any }): T {
-		const model = new this()
+		const model = new this() as T
 		model._set(data)
-		return model as T
+		return model
 	}
 
 	public codingKeys(): { [localKey: string]: string } {
@@ -30,7 +26,7 @@ export class Model implements Modelable {
 
 	protected _data: { [feild: string]: any } = {}
 
-	private _set(data: { [feild: string]: any }) {
+	protected _set(data: { [feild: string]: any }) {
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const value = data[codingKey]
@@ -66,7 +62,7 @@ export class Model implements Modelable {
 		}
 	}
 
-	public data(): FirebaseFirestore.DocumentData {
+	public data(): firebase.firestore.DocumentData {
 		let data: { [feild: string]: any } = {}
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]

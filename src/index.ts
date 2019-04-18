@@ -1,6 +1,5 @@
-import * as FirebaseFirestore from '@google-cloud/firestore'
-
-export let firestore: FirebaseFirestore.Firestore
+import * as firebase from 'firebase'
+export let firestore: firebase.firestore.Firestore
 export const initialize = (appFirestore: any) => {
     firestore = appFirestore
 }

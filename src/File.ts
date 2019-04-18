@@ -48,7 +48,7 @@ export class File {
         this.additionalData = data.additionalData
     }
 
-    public data(): FirebaseFirestore.DocumentData {
+    public data(): firebase.firestore.DocumentData {
 		return {
             mimeType: this.mimeType,
             name: this.name,

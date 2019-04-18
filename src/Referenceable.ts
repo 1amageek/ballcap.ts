@@ -1,5 +1,4 @@
-import * as FirebaseFirestore from '@google-cloud/firestore'
-
+import * as firebase from 'firebase'
 
 export interface Referenceable {
 
@@ -11,6 +10,6 @@ export interface Referenceable {
     /*
         DocumentReference
     */
-    documentReference: FirebaseFirestore.DocumentReference
+    documentReference: firebase.firestore.DocumentReference
 
 }
