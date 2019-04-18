@@ -16,7 +16,15 @@ export class User extends Document {
 
 __Document__
 ```typescript
+
+// autoID
 const user: User = new User()
+
+// with ID
+const user: User = new User("ID")
+
+// with DocumentReference
+const user: User = new User(firestore.doc("a/a"))
 
 // save
 await user.save()
