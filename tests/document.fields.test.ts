@@ -1,6 +1,6 @@
 import * as firebase from '@firebase/testing'
 import * as Ballcap from "../src/index"
-import { Document } from '../src/Document'
+import { Doc } from '../src/Document'
 import { Field } from '../src/Field'
 import { } from "reflect-metadata"
 
@@ -9,14 +9,14 @@ const app = firebase.initializeAdminApp({
 })
 Ballcap.initialize(app.firestore())
 
-describe("Document Fields", () => {
+describe("Doc Fields", () => {
 
 	test("string", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field a: string = "a"
 			@Field b: string = `bb`
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({
 			"a": "a",
 			"b": "bb"
@@ -30,11 +30,11 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("string?", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field a?: string
 			@Field b?: string
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({
 			"a": null,
 			"b": null
@@ -48,11 +48,11 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("string!", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field a?: string = "a"
 			@Field b?: string = `aasdfe`
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({
 			"a": "a",
 			"b": "aasdfe"
@@ -66,13 +66,13 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("number", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field n: number = 0
 			@Field f: number = -1
 			@Field d: number = 10.23
 			@Field i: number = 123
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.n).toEqual(0)
 		expect(doc.f).toEqual(-1)
 		expect(doc.d).toEqual(10.23)
@@ -100,13 +100,13 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("number?", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field n?: number
 			@Field f?: number
 			@Field d?: number
 			@Field i?: number
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.n).toEqual(null)
 		expect(doc.f).toEqual(null)
 		expect(doc.d).toEqual(null)
@@ -134,13 +134,13 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("number!", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field n?: number = 0
 			@Field f?: number = -1
 			@Field d?: number = 10.23
 			@Field i?: number = 123
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.n).toEqual(0)
 		expect(doc.f).toEqual(-1)
 		expect(doc.d).toEqual(10.23)
@@ -168,11 +168,11 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("boolean", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field t: boolean = true
 			@Field f: boolean = false
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.t).toEqual(true)
 		expect(doc.f).toEqual(false)
 		expect(doc.data()).toEqual({
@@ -190,11 +190,11 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("boolean?", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field t?: boolean
 			@Field f?: boolean
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.t).toEqual(null)
 		expect(doc.f).toEqual(null)
 		expect(doc.data()).toEqual({
@@ -212,11 +212,11 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("boolean!", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field t?: boolean = true
 			@Field f?: boolean = false
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.t).toEqual(true)
 		expect(doc.f).toEqual(false)
 		expect(doc.data()).toEqual({
@@ -234,10 +234,10 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("string[]", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field ss: string[] = ["aa", "bb", "cc"]
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.ss).toEqual(["aa", "bb", "cc"])
 		expect(doc.data()).toEqual({
 			"ss": ["aa", "bb", "cc"]
@@ -245,10 +245,10 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("string[]?", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field ss?: string[]
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.ss).toEqual(null)
 		expect(doc.data()).toEqual({
 			"ss": null
@@ -256,10 +256,10 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("string[]!", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field ss?: string[] = ["aa", "bb", "cc"]
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.ss).toEqual(["aa", "bb", "cc"])
 		expect(doc.data()).toEqual({
 			"ss": ["aa", "bb", "cc"]
@@ -267,10 +267,10 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("number[]", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field ss: number[] = [1, 2, 3]
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.ss).toEqual([1, 2, 3])
 		expect(doc.data()).toEqual({
 			"ss": [1, 2, 3]
@@ -278,10 +278,10 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("number[]?", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field ss?: number[]
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.ss).toEqual(null)
 		expect(doc.data()).toEqual({
 			"ss": null
@@ -289,10 +289,10 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("number[]!", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field ss?: number[] = [1, 2, 3]
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.ss).toEqual([1, 2, 3])
 		expect(doc.data()).toEqual({
 			"ss": [1, 2, 3]
@@ -300,12 +300,12 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("caseSensitive", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field caseSensitive: string = "caseSensitive"
 			@Field casESensitive: string = "casESensitive"
 			@Field casESensitivE: string = "casESensitivE"
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.caseSensitive).toEqual("caseSensitive")
 		expect(doc.casESensitive).toEqual("casESensitive")
 		expect(doc.casESensitivE).toEqual("casESensitivE")
@@ -317,12 +317,12 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("caseSensitive?", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field caseSensitive?: string
 			@Field casESensitive?: string
 			@Field casESensitivE?: string
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.caseSensitive).toEqual(null)
 		expect(doc.casESensitive).toEqual(null)
 		expect(doc.casESensitivE).toEqual(null)
@@ -334,12 +334,12 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("caseSensitive!", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field caseSensitive?: string = "caseSensitive"
 			@Field casESensitive?: string = "casESensitive"
 			@Field casESensitivE?: string = "casESensitivE"
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.caseSensitive).toEqual("caseSensitive")
 		expect(doc.casESensitive).toEqual("casESensitive")
 		expect(doc.casESensitivE).toEqual("casESensitivE")
@@ -351,61 +351,61 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("documentReference", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field d: firebase.firestore.DocumentReference = app.firestore().doc("a/a")
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({ "d": app.firestore().doc("a/a") })
 	}, 100)
 
 	test("documentReference?", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field d?: firebase.firestore.DocumentReference
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({ "d": null })
 	}, 100)
 
 	test("documentReference!", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field d: firebase.firestore.DocumentReference = app.firestore().doc("a/a")
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({ "d": app.firestore().doc("a/a") })
 	}, 100)
 
 	test("object", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field o: { [key: string]: any } = { "a": "b" }
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({ "o": { "a": "b" } })
 	}, 100)
 
 	test("object?", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field o?: { [key: string]: any }
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({ "o": null })
 	}, 100)
 
 	test("object!", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field o?: { [key: string]: any } = { "a": "b" }
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({ "o": { "a": "b" } })
 	}, 100)
 
 	test("model", async () => {
-		class Sub extends Document {
+		class Sub extends Doc {
 			@Field s: string = "s"
 		}
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field model: Sub = new Sub("a")
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.model.s).toEqual("s")
 		expect(doc.data()).toEqual({
 			"model": {
@@ -415,13 +415,13 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("model?", async () => {
-		class Sub extends Document {
+		class Sub extends Doc {
 			@Field s?: string
 		}
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field model?: Sub
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.model).toEqual(null)
 		expect(doc.data()).toEqual({
 			"model": null
@@ -429,13 +429,13 @@ describe("Document Fields", () => {
 	}, 100)
 
 	test("model!", async () => {
-		class Sub extends Document {
+		class Sub extends Doc {
 			@Field s?: string = "s"
 		}
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field model?: Sub = new Sub()
 		}
-		const doc: Doc = new Doc()
+		const doc: Moc = new Moc()
 		expect(doc.model!.s).toEqual("s")
 		expect(doc.data()).toEqual({
 			"model": {

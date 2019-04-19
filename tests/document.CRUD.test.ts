@@ -1,53 +1,53 @@
 import * as firebase from '@firebase/testing'
 import * as Ballcap from "../src/index"
-import { Document } from '../src/Document'
+import { Doc } from '../src/Document'
 import { Field } from '../src/Field'
 import { } from "reflect-metadata"
-import { Batch } from '../src/Batch';
+import { Batch } from '../src/Batch'
 
 const app = firebase.initializeAdminApp({
 	projectId: "test-project"
 })
 Ballcap.initialize(app.firestore())
 
-describe("Document CRUD", () => {
+describe("Doc CRUD", () => {
 
 	test("SaveUpdateDelete", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field a: string = "a"
 			@Field b: string = `bb`
 		}
-		const doc: Doc = new Doc("a")
+		const doc: Moc = new Moc("a")
 		await doc.save()
-		const d = await Doc.get("a") as Doc
+		const d = await Moc.get("a") as Moc
 		expect(d.a).toEqual("a")
 		expect(d.b).toEqual("bb")
 		d.a = "aa"
 		d.b = "bbbb"
 		await d.update()
-		const _d = await Doc.get("a") as Doc
+		const _d = await Moc.get("a") as Moc
 		expect(_d.a).toEqual("aa")
 		expect(_d.b).toEqual("bbbb")
 		await _d.delete()
-		const del = await Doc.get("a")
+		const del = await Moc.get("a")
 		expect(del).toBeUndefined()
 	}, 1000)
 
 	test("SaveUpdateDelete with Batch", async () => {
-		class Doc extends Document {
+		class Moc extends Doc {
 			@Field a: string = "a"
 			@Field b: string = `bb`
 		}
 
 		{
-			const doc: Doc = new Doc("b")
+			const doc: Moc = new Moc("b")
 			const batch = new Batch()
 			batch.save(doc)
 			await batch.commit()
 		}
 
 		{
-			const doc = await Doc.get("b") as Doc
+			const doc = await Moc.get("b") as Moc
 			expect(doc.a).toEqual("a")
 			expect(doc.b).toEqual("bb")
 			doc.a = "aa"
@@ -58,7 +58,7 @@ describe("Document CRUD", () => {
 		}
 
 		{
-			const doc = await Doc.get("b") as Doc
+			const doc = await Moc.get("b") as Moc
 			expect(doc.a).toEqual("aa")
 			expect(doc.b).toEqual("bbbb")
 			const batch = new Batch()
@@ -67,7 +67,7 @@ describe("Document CRUD", () => {
 		}
 
 		{
-			const doc = await Doc.get("b")
+			const doc = await Moc.get("b")
 			expect(doc).toBeUndefined()
 		}
 	}, 1000)
