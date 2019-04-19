@@ -1,6 +1,6 @@
 {
   "private": false,
-  "name": "ballcap-admin",
+  "name": "@1amageek/ballcap",
   "version": "0.0.1",
   "scripts": {
     "lint": "./node_modules/.bin/tslint -p tslint.json",
@@ -21,7 +21,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/1amageek/ballcap-admin.ts.git"
+    "url": "git+https://github.com/1amageek/ballcap.ts.git"
   },
   "keywords": [
     "firestore",
@@ -33,7 +33,7 @@
   "author": "1amageek",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/1amageek/ballcap-admin.ts/issues"
+    "url": "https://github.com/1amageek/ballcap.ts/issues"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
