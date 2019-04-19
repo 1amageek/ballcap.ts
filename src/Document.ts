@@ -127,6 +127,33 @@ export class Doc extends Model implements Documentable {
 		}
 	}
 
+	public setData(data: { [feild: string]: any }) {
+		this._set(data)
+		return this
+	}
+
+	public async fetch(transaction?: firebase.firestore.Transaction) {
+		try {
+			let snapshot: firebase.firestore.DocumentSnapshot
+            if (transaction) {
+                snapshot = await transaction.get(this.documentReference)
+            } else {
+                snapshot = await this.documentReference.get()
+            }
+			this.snapshot = snapshot
+			const option: firebase.firestore.SnapshotOptions = {
+				serverTimestamps: "estimate"
+			}
+			const data = snapshot.data(option)
+			if (data) {
+				this._set(data)
+			}
+			return this
+		} catch (error) {
+			throw error
+		}
+	}
+
 	public async save() {
 		const batch = new Batch()
 		batch.save(this)
