@@ -2,14 +2,17 @@ import * as firebase from 'firebase'
 import { Referenceable } from './Referenceable'
 import { Batch } from './Batch'
 import { Model } from './Model'
+import { Collection } from './Collection'
+import { SubCollectionSymbol } from './SubCollection'
 import { firestore } from './index'
 import { } from "reflect-metadata"
+
 
 export interface Documentable extends Referenceable {
 	data(): firebase.firestore.DocumentData
 }
 
-export class Document extends Model implements Documentable {
+export class Doc extends Model implements Documentable {
 
 	public id: string
 
@@ -57,14 +60,15 @@ export class Document extends Model implements Documentable {
 		return this.documentReference.collection(path)
 	}
 
-	public static fromData<T extends Document>(data: { [feild: string]: any }, reference?: string | firebase.firestore.DocumentReference): T {
+	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | firebase.firestore.DocumentReference): T {
 		const model = new this(reference) as T
 		model._set(data)
 		return model
 	}
 
-	public static fromSnapshot<T extends Document>(snapshot: firebase.firestore.DocumentSnapshot): T {
+	public static fromSnapshot<T extends Doc>(snapshot: firebase.firestore.DocumentSnapshot): T {
 		const model = new this(snapshot.ref) as T
+		model.snapshot = snapshot
 		const option: firebase.firestore.SnapshotOptions = {
 			serverTimestamps: "estimate"
 		}
@@ -79,6 +83,25 @@ export class Document extends Model implements Documentable {
 		super._set(data)
 		this.createdAt = data["createdAt"] || firebase.firestore.Timestamp.now()
 		this.updatedAt = data["updatedAt"] || firebase.firestore.Timestamp.now()
+	}
+
+	private _subCollections: { [key: string]: any } = {}
+
+	private _defineCollection(key: string, value?: any) {
+		const descriptor: PropertyDescriptor = {
+			enumerable: true,
+			configurable: true,
+			get: () => {
+				return this._subCollections[key]
+			},
+			set: (newValue) => {
+				if (newValue instanceof Collection) {
+					newValue.collectionReference = this.documentReference.collection(key)
+					this._subCollections[key] = newValue
+				}
+			}
+		}
+		Object.defineProperty(this, key, descriptor)
 	}
 
 	/**
@@ -98,6 +121,9 @@ export class Document extends Model implements Documentable {
 		} else {
 			this.documentReference = this.collectionReference().doc()
 			this.id = this.documentReference.id
+		}
+		for (const collectoin of this.subCollections()) {
+			this._defineCollection(collectoin)
 		}
 	}
 
@@ -144,6 +170,10 @@ export class Document extends Model implements Documentable {
 		} catch (error) {
 			throw error
 		}
+	}
+
+	public subCollections(): string[] {
+		return Reflect.getMetadata(SubCollectionSymbol, this) || []
 	}
 }
 
