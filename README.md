@@ -12,6 +12,12 @@ export class User extends Document {
 }
 ```
 
+## Installation
+
+```
+npm add @1amageek/ballcap
+```
+
 ## Usage
 
 ### Initialize
