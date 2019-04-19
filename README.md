@@ -12,7 +12,7 @@ export class User extends Document {
 }
 ```
 
-## Install
+## Installation
 
 ```
 npm add @1amageek/ballcap
