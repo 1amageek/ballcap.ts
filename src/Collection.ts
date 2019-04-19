@@ -1,8 +1,8 @@
 import * as firebase from 'firebase'
 import { firestore } from './index'
-import { Doc } from './Document'
+import { Documentable } from './Document'
 
-export class Collection<T extends Doc> extends Array<T> {
+export class Collection<T extends Documentable> extends Array<T> {
 
     public collectionReference: firebase.firestore.CollectionReference
 
