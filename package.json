@@ -1,6 +1,9 @@
 {
   "private": false,
   "name": "@1amageek/ballcap",
+  "publishConfig": {
+    "access": "public"
+  },
   "version": "0.0.1",
   "scripts": {
     "lint": "./node_modules/.bin/tslint -p tslint.json",
