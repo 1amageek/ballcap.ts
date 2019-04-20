@@ -1,9 +1,9 @@
-import { Modelable } from './Modelable'
 import { CodableSymbol } from './Codable'
 import { FieldSymbol } from './Field'
+import { DataRepresentable } from './DataRepresentable'
 import { File } from './File'
 
-export class Model implements Modelable {
+export class Model implements DataRepresentable {
 
 	public static from<T extends Model>(data: { [feild: string]: any }): T {
 		const model = new this() as T
@@ -122,4 +122,3 @@ export class Model implements Modelable {
 		}
 	}
 }
-

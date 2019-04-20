@@ -1,7 +1,7 @@
 import * as firebase from 'firebase'
 import { firestore } from './index'
-import { Documentable } from './Document'
-import { Collection } from './Collection'
+import { Referenceable } from './Referenceable'
+import { DataRepresentable } from './DataRepresentable'
 
 export class Batch {
 
@@ -11,10 +11,10 @@ export class Batch {
 		this._writeBatch = firestore.batch()
 	}
 
-	public save<T extends Documentable>(document: T, reference?: firebase.firestore.DocumentReference): void
-	public save<T extends Documentable>(documents: Collection<T>, reference: firebase.firestore.CollectionReference): void
+	public save<T extends DataRepresentable & Referenceable>(document: T, reference?: firebase.firestore.DocumentReference): void
+	public save<T extends DataRepresentable & Referenceable>(documents: T[], reference: firebase.firestore.CollectionReference): void
 
-	save<T extends Documentable>(documentOrDocuments: T | Collection<T>, reference?: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference) {
+	save<T extends DataRepresentable & Referenceable>(documentOrDocuments: T | T[], reference?: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference) {
 		if (documentOrDocuments instanceof Array && reference instanceof firebase.firestore.CollectionReference) {
 			for (const document of documentOrDocuments) {
 				const data = document.data()
@@ -29,7 +29,7 @@ export class Batch {
 			if (reference instanceof firebase.firestore.CollectionReference) {
 				fail("[Ballcap: Batch] invalid reference. If you want to save the document, please set DocumentReference.")
 			}
-			const document: T = documentOrDocuments as T
+			const document = documentOrDocuments as unknown as DataRepresentable & Referenceable
 			const data = document.data()
 			if (data) {
 				const documentReference = (reference || document.documentReference) as firebase.firestore.DocumentReference
@@ -40,10 +40,10 @@ export class Batch {
 		}
 	}
 
-	public update<T extends Documentable>(document: T, reference?: firebase.firestore.DocumentReference): void
-	public update<T extends Documentable>(documents: Collection<T>, reference: firebase.firestore.CollectionReference): void
+	public update<T extends DataRepresentable & Referenceable>(document: T, reference?: firebase.firestore.DocumentReference): void
+	public update<T extends DataRepresentable & Referenceable>(documents: T[], reference: firebase.firestore.CollectionReference): void
 
-	update<T extends Documentable>(documentOrDocuments: T | Collection<T>, reference?: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference) {
+	update<T extends DataRepresentable & Referenceable>(documentOrDocuments: T | T[], reference?: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference) {
 		if (documentOrDocuments instanceof Array && reference instanceof firebase.firestore.CollectionReference) {
 			for (const document of documentOrDocuments) {
 				const data = document.data()
@@ -57,7 +57,7 @@ export class Batch {
 			if (reference instanceof firebase.firestore.CollectionReference) {
 				fail("[Ballcap: Batch] invalid reference. If you want to update the document, please set DocumentReference.")
 			}
-			const document: T = documentOrDocuments as T
+			const document = documentOrDocuments as unknown as DataRepresentable & Referenceable
 			const data = document.data()
 			if (data) {
 				const documentReference = (reference || document.documentReference) as firebase.firestore.DocumentReference
@@ -67,10 +67,10 @@ export class Batch {
 		}
 	}
 
-	public delete<T extends Documentable>(document: T, reference?: firebase.firestore.DocumentReference): void
-	public delete<T extends Documentable>(documents: Collection<T>, reference: firebase.firestore.CollectionReference): void
+	public delete<T extends DataRepresentable & Referenceable>(document: T, reference?: firebase.firestore.DocumentReference): void
+	public delete<T extends DataRepresentable & Referenceable>(documents: T[], reference: firebase.firestore.CollectionReference): void
 
-	delete<T extends Documentable>(documentOrDocuments: T | Collection<T>, reference?: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference) {
+	delete<T extends DataRepresentable & Referenceable>(documentOrDocuments: T | T[], reference?: firebase.firestore.DocumentReference | firebase.firestore.CollectionReference) {
 		if (documentOrDocuments instanceof Array && reference instanceof firebase.firestore.CollectionReference) {
 			for (const document of documentOrDocuments) {
 				const documentReference = reference.doc(document.id)
@@ -80,7 +80,7 @@ export class Batch {
 			if (reference instanceof firebase.firestore.CollectionReference) {
 				fail("[Ballcap: Batch] invalid reference. If you want to delete the document, please set DocumentReference.")
 			}
-			const document: T = documentOrDocuments as T
+			const document = documentOrDocuments as unknown as DataRepresentable & Referenceable
 			const documentReference = (reference || document.documentReference) as firebase.firestore.DocumentReference
 			this._writeBatch.delete(documentReference)
 		}

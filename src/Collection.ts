@@ -1,6 +1,8 @@
 import * as firebase from 'firebase'
 import { firestore } from './index'
-import { Documentable, Doc } from './Document'
+import { Documentable } from './Documentable'
+import { Referenceable } from './Referenceable'
+import { DataRepresentable } from './DataRepresentable'
 
 export class Collection<T extends Documentable> extends Array<T> {
 
@@ -11,7 +13,7 @@ export class Collection<T extends Documentable> extends Array<T> {
         this.collectionReference = collectionReference || firestore.collection("version")
     }
 
-    public doc<T extends typeof Doc>(id: string, type: T) {
-        return new type(id) as InstanceType<T>
+    public doc(id: string, type: T): Referenceable & DataRepresentable {
+        return type.init(id)
     }
 }
