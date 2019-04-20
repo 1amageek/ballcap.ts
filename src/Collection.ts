@@ -11,7 +11,7 @@ export class Collection<T extends DocumentType> extends Array<T> {
         this.collectionReference = collectionReference || firestore.collection("version")
     }
 
-    public doc<U extends Documentable>(id: string, type: U): DocumentType {
+    public doc<U extends Documentable<T>>(id: string, type: U): T {
         return type.init(id)
     }
 }
