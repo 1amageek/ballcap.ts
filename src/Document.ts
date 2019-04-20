@@ -1,13 +1,13 @@
 import * as firebase from 'firebase'
 import { Batch } from './Batch'
 import { Model } from './Model'
-import { Referenceable } from './Referenceable'
+import { DocumentType } from './Documentable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
 import { firestore } from './index'
 import { } from "reflect-metadata"
 
-export class Doc extends Model implements Referenceable {
+export class Doc extends Model implements DocumentType {
 
 	public id: string
 
