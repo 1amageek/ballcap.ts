@@ -1,8 +1,9 @@
 import * as firebase from 'firebase'
 import { Referenceable } from './Referenceable'
 import { DataRepresentable } from './DataRepresentable'
+import { DataManagable } from './DataManagable'
 
-export interface DocumentType extends Referenceable, DataRepresentable { }
+export interface DocumentType extends Referenceable, DataRepresentable, DataManagable { }
 
 export interface Documentable<T extends DocumentType> {
 

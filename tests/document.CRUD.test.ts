@@ -47,7 +47,7 @@ describe("Doc CRUD", () => {
 		}
 
 		{
-			const doc = await Moc.get("b") as Moc
+			const doc: Moc = await new Moc("b").fetch()
 			expect(doc.a).toEqual("a")
 			expect(doc.b).toEqual("bb")
 			doc.a = "aa"

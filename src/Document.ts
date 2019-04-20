@@ -55,6 +55,11 @@ export class Doc extends Model implements DocumentType {
 		return this.documentReference.collection(path)
 	}
 
+	public static init<T extends Doc>(reference?: string | firebase.firestore.DocumentReference): T {
+		const model = new this(reference) as T
+		return model
+	}
+
 	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | firebase.firestore.DocumentReference): T {
 		const model = new this(reference) as T
 		model._set(data)
@@ -127,7 +132,7 @@ export class Doc extends Model implements DocumentType {
 		return this
 	}
 
-	public async fetch(transaction?: firebase.firestore.Transaction) {
+	public async fetch(transaction?: firebase.firestore.Transaction): Promise<this> {
 		try {
 			let snapshot: firebase.firestore.DocumentSnapshot
             if (transaction) {
