@@ -7,7 +7,6 @@ import { SubCollectionSymbol } from './SubCollection'
 import { firestore } from './index'
 import { } from "reflect-metadata"
 
-
 export class Doc extends Model implements Referenceable {
 
 	public id: string
