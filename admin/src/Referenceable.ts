@@ -1,4 +1,4 @@
-import * as firebase from 'firebase'
+import { DocumentReference } from './index'
 
 export interface Referenceable {
 
@@ -10,6 +10,6 @@ export interface Referenceable {
     /*
         DocumentReference
     */
-    documentReference: firebase.firestore.DocumentReference
+    documentReference: DocumentReference
 
 }

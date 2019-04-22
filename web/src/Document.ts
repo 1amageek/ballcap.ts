@@ -1,23 +1,22 @@
-import * as firebase from 'firebase'
 import { Batch } from './Batch'
 import { Model } from './Model'
 import { DocumentType } from './Documentable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
-import { firestore } from './index'
+import { firestore, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, SnapshotOptions, Transaction } from './index'
 import { } from "reflect-metadata"
 
 export class Doc extends Model implements DocumentType {
 
 	public id: string
 
-	public documentReference: firebase.firestore.DocumentReference
+	public documentReference: DocumentReference
 
-	public snapshot?: firebase.firestore.DocumentSnapshot
+	public snapshot?: DocumentSnapshot
 
-	public createdAt: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now()
+	public createdAt: Timestamp = Timestamp.now()
 
-	public updatedAt: firebase.firestore.Timestamp = firebase.firestore.Timestamp.now()
+	public updatedAt: Timestamp = Timestamp.now()
 
 	public static version(): string {
 		return "1"
@@ -31,7 +30,7 @@ export class Doc extends Model implements DocumentType {
 		return `version/${this.version()}/${this.modelName()}`
 	}
 
-	public static collectionReference(): firebase.firestore.CollectionReference {
+	public static collectionReference(): CollectionReference {
 		return firestore.collection(this.path())
 	}
 
@@ -47,7 +46,7 @@ export class Doc extends Model implements DocumentType {
 		return `version/${this.version()}/${this.modelName()}`
 	}
 
-	public collectionReference(): firebase.firestore.CollectionReference {
+	public collectionReference(): CollectionReference {
 		return firestore.collection(this.path())
 	}
 
@@ -55,21 +54,21 @@ export class Doc extends Model implements DocumentType {
 		return this.documentReference.collection(path)
 	}
 
-	public static init<T extends Doc>(reference?: string | firebase.firestore.DocumentReference): T {
+	public static init<T extends Doc>(reference?: string | DocumentReference): T {
 		const model = new this(reference) as T
 		return model
 	}
 
-	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | firebase.firestore.DocumentReference): T {
+	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | DocumentReference): T {
 		const model = new this(reference) as T
 		model._set(data)
 		return model
 	}
 
-	public static fromSnapshot<T extends Doc>(snapshot: firebase.firestore.DocumentSnapshot): T {
+	public static fromSnapshot<T extends Doc>(snapshot: DocumentSnapshot): T {
 		const model = new this(snapshot.ref) as T
 		model.snapshot = snapshot
-		const option: firebase.firestore.SnapshotOptions = {
+		const option: SnapshotOptions = {
 			serverTimestamps: "estimate"
 		}
 		const data = snapshot.data(option)
@@ -81,8 +80,8 @@ export class Doc extends Model implements DocumentType {
 
 	protected _set(data: { [feild: string]: any }) {
 		super._set(data)
-		this.createdAt = data["createdAt"] || firebase.firestore.Timestamp.now()
-		this.updatedAt = data["updatedAt"] || firebase.firestore.Timestamp.now()
+		this.createdAt = data["createdAt"] || Timestamp.now()
+		this.updatedAt = data["updatedAt"] || Timestamp.now()
 	}
 
 	private _subCollections: { [key: string]: any } = {}
@@ -107,10 +106,10 @@ export class Doc extends Model implements DocumentType {
 	/**
 	 * constructor
 	 */
-	public constructor(reference?: string | firebase.firestore.DocumentReference) {
+	public constructor(reference?: string | DocumentReference) {
 		super()
-		let ref: firebase.firestore.DocumentReference | undefined = undefined
-		if (reference instanceof firebase.firestore.DocumentReference) {
+		let ref: DocumentReference | undefined = undefined
+		if (reference instanceof Object) {
 			ref = reference
 		} else if (typeof reference === "string") {
 			ref = firestore.doc(`${this.path()}/${reference}`)
@@ -132,16 +131,16 @@ export class Doc extends Model implements DocumentType {
 		return this
 	}
 
-	public async fetch(transaction?: firebase.firestore.Transaction): Promise<this> {
+	public async fetch(transaction?: Transaction): Promise<this> {
 		try {
-			let snapshot: firebase.firestore.DocumentSnapshot
+			let snapshot: DocumentSnapshot
             if (transaction) {
                 snapshot = await transaction.get(this.documentReference)
             } else {
                 snapshot = await this.documentReference.get()
             }
 			this.snapshot = snapshot
-			const option: firebase.firestore.SnapshotOptions = {
+			const option: SnapshotOptions = {
 				serverTimestamps: "estimate"
 			}
 			const data = snapshot.data(option)
@@ -172,18 +171,18 @@ export class Doc extends Model implements DocumentType {
 		await batch.commit()
 	}
 
-	public static async get(reference: string | firebase.firestore.DocumentReference) {
-		let ref: firebase.firestore.DocumentReference
-		if (reference instanceof firebase.firestore.DocumentReference) {
+	public static async get(reference: string | DocumentReference) {
+		let ref: DocumentReference
+		if (reference instanceof DocumentReference) {
 			ref = reference
 		} else {
 			ref = firestore.doc(`${this.path()}/${reference}`)
 		}
 		try {
-			const snapshot: firebase.firestore.DocumentSnapshot = await ref.get()
+			const snapshot: DocumentSnapshot = await ref.get()
 			if (snapshot.exists) {
 				const model = new this(snapshot.ref)
-				const option: firebase.firestore.SnapshotOptions = {
+				const option: SnapshotOptions = {
 					serverTimestamps: "estimate"
 				}
 				const data = snapshot.data(option)

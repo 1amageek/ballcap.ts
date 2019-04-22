@@ -1,12 +1,11 @@
-import * as firebase from 'firebase'
-import { firestore } from './index'
+import { firestore, CollectionReference } from './index'
 import { Documentable, DocumentType } from './Documentable'
 
 export class Collection<T extends DocumentType> extends Array<T> {
 
-    public collectionReference: firebase.firestore.CollectionReference
+    public collectionReference: CollectionReference
 
-    constructor(collectionReference?: firebase.firestore.CollectionReference) {
+    constructor(collectionReference?: CollectionReference) {
         super()
         this.collectionReference = collectionReference || firestore.collection("version")
     }

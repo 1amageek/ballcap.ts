@@ -1,0 +1,73 @@
+{
+  "private": false,
+  "name": "@1amageek/ballcap-admin",
+  "publishConfig": {
+    "access": "public"
+  },
+  "version": "0.2.5",
+  "scripts": {
+    "lint": "./node_modules/.bin/tslint -p tslint.json",
+    "build": "./node_modules/.bin/tsc -d",
+    "prepare": "npm run build",
+    "serve": "npm run build && firebase serve --only functions",
+    "shell": "npm run build && firebase experimental:functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "description": "Cloud Firestore model framework for TypeScript - Google",
+  "contributors": [
+    {
+      "name": "Norikazu Muramoto",
+      "email": "tmy0x3@icloud.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/1amageek/ballcap.ts.git"
+  },
+  "keywords": [
+    "firestore",
+    "firebase",
+    "ballcap",
+    "model",
+    "typescript"
+  ],
+  "author": "1amageek",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/1amageek/ballcap.ts/issues"
+  },
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "dependencies": {
+    "reflect-metadata": "^0.1.12"
+  },
+  "devDependencies": {
+    "@firebase/testing": "^0.7.10",
+    "@types/jest": "^24.0.11",
+    "@types/node": "^11.13.4",
+    "firebase-admin": "^7.2.0",
+    "jest": "^24.7.1",
+    "ts-jest": "^24.0.2",
+    "tslint": "^5.15.0",
+    "typescript": "^3.4.3"
+  },
+  "peerDependencies": {
+    "firebase-admin": "^7.2.0"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  }
+}

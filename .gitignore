@@ -8,6 +8,7 @@ firebase-debug.log*
 firestore-debug.log*
 
 lib/
+*/**/secret.json
 
 # Firebase cache
 .firebase/

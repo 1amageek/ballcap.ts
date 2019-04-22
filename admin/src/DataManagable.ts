@@ -1,8 +1,8 @@
-import * as firebase from 'firebase'
+import { Transaction } from './index'
 
 export interface DataManagable {
 
-	fetch(transaction?: firebase.firestore.Transaction): Promise<this>
+	fetch(transaction?: Transaction): Promise<this>
 
  	save(): Promise<void>
 
