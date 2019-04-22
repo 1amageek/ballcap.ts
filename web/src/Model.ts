@@ -1,3 +1,4 @@
+import { DocumentData } from './index'
 import { CodableSymbol } from './Codable'
 import { FieldSymbol } from './Field'
 import { DataRepresentable } from './DataRepresentable'
@@ -62,7 +63,7 @@ export class Model implements DataRepresentable {
 		}
 	}
 
-	public data(): firebase.firestore.DocumentData {
+	public data(): DocumentData {
 		let data: { [feild: string]: any } = {}
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]

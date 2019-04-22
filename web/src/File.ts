@@ -1,3 +1,4 @@
+import { DocumentData } from './index'
 
 export type FileType = {
     mimeType: string
@@ -48,7 +49,7 @@ export class File {
         this.additionalData = data.additionalData
     }
 
-    public data(): firebase.firestore.DocumentData {
+    public data(): DocumentData {
 		return {
             mimeType: this.mimeType,
             name: this.name,
