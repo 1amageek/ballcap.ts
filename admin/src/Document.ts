@@ -1,6 +1,6 @@
 import { Batch } from './Batch'
 import { Model } from './Model'
-import { DocumentType } from './Documentable'
+import { DocumentType, Documentable } from './Documentable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
 import { firestore, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, Transaction } from './index'
@@ -17,6 +17,11 @@ export class Doc extends Model implements DocumentType {
 	public createdAt: Timestamp = Timestamp.now()
 
 	public updatedAt: Timestamp = Timestamp.now()
+
+	public static self<T extends Doc>(): Documentable<T> {
+		const type: Documentable<T> = this
+		return type
+	}
 
 	public static version(): string {
 		return "1"
