@@ -133,7 +133,7 @@ export class Doc extends Model implements DocumentType {
 		return this
 	}
 
-	public async fetch(transaction?: Transaction): Promise<this> {
+	public async fetch(transaction?: Transaction) {
 		try {
 			let snapshot: DocumentSnapshot
             if (transaction) {
