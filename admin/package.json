@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.2.7",
+  "version": "0.2.8",
   "scripts": {
     "lint": "./node_modules/.bin/tslint -p tslint.json",
     "build": "./node_modules/.bin/tsc -d",
@@ -47,14 +47,14 @@
     "@firebase/testing": "^0.7.10",
     "@types/jest": "^24.0.11",
     "@types/node": "^11.13.4",
-    "firebase-admin": "^7.2.0",
+    "firebase-admin": "^7.1.0",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
     "tslint": "^5.15.0",
     "typescript": "^3.4.3"
   },
   "peerDependencies": {
-    "firebase-admin": "^7.2.0"
+    "firebase-admin": "^7.1.0"
   },
   "jest": {
     "transform": {
