@@ -176,7 +176,7 @@ export class Doc extends Model implements DocumentType {
 		await batch.commit()
 	}
 
-	public static async get(reference: string | DocumentReference) {
+	public static async get<T extends Doc>(reference: string | DocumentReference) {
 		let ref: DocumentReference
 		if (reference instanceof DocumentReference) {
 			ref = reference
@@ -186,11 +186,8 @@ export class Doc extends Model implements DocumentType {
 		try {
 			const snapshot: DocumentSnapshot = await ref.get()
 			if (snapshot.exists) {
-				const model = new this(snapshot.ref)
-				const option: SnapshotOptions = {
-					serverTimestamps: "estimate"
-				}
-				const data = snapshot.data(option)
+				const model = new this(snapshot.ref) as T
+				const data = snapshot.data()
 				if (data) {
 					model._set(data)
 				}
