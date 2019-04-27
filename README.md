@@ -14,8 +14,16 @@ export class User extends Document {
 
 ## Installation
 
+__Web__
+
 ```
 npm add @1amageek/ballcap
+```
+
+__Admin(node.js)__
+
+```
+npm add @1amageek/ballcap-admin
 ```
 
 ## Usage
