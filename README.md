@@ -85,7 +85,7 @@ const user: User = await User.fromSnapshot(documentSnapshot)
 ```
 
 ### Field
-
+Use Field to represent a field in a document.
 A Field can have another Document. In that case, use the `@Codable` decorator.
 
 ```typescript
@@ -101,3 +101,18 @@ export class User extends Document {
 	@Field address: Address[] = []
 }
 ```
+
+### SubCollecion
+Use SubCollection and Collection to represent SubCollection.
+
+
+```typescript
+class Charge extends Doc {
+    @Field amount: number = 0
+    @Field userID!: string
+}
+class User extends Doc {
+    @SubCollection charges: Collection<Charge> = new Collection()
+}
+```
+
