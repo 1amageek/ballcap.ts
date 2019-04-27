@@ -16,12 +16,13 @@ export { DataRepresentable, Referenceable, DocumentType, Documentable }
 import { Codable } from './Codable'
 import { Field } from './Field'
 import { File } from './File'
+import { SubCollection } from './SubCollection'
 import { Model } from './Model'
 import { Doc } from './Document'
 import { Collection } from './Collection'
 import { Batch } from './Batch'
 
-export { Codable, Field, File, Model, Doc, Collection, Batch }
+export { Codable, Field, File, SubCollection, Model, Doc, Collection, Batch }
 
 export let firestore: firebase.firestore.Firestore
 export const initialize = (appFirestore: any) => {
