@@ -187,6 +187,7 @@ export class Doc extends Model implements DocumentType {
 			const snapshot: DocumentSnapshot = await ref.get()
 			if (snapshot.exists) {
 				const model = new this(snapshot.ref) as T
+				model.snapshot = snapshot
 				const data = snapshot.data()
 				if (data) {
 					model._set(data)
