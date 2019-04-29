@@ -374,6 +374,30 @@ describe("Doc Fields", () => {
 		expect(doc.data()).toEqual({ "d": app.firestore().doc("a/a") })
 	}, 100)
 
+	test("documentReference[]", async () => {
+		class Moc extends Doc {
+			@Field d: firebase.firestore.DocumentReference[] = [app.firestore().doc("a/a")]
+		}
+		const doc: Moc = new Moc()
+		expect(doc.data()).toEqual({ "d": [app.firestore().doc("a/a")] })
+	}, 100)
+
+	test("documentReference[]?", async () => {
+		class Moc extends Doc {
+			@Field d?: firebase.firestore.DocumentReference[]
+		}
+		const doc: Moc = new Moc()
+		expect(doc.data()).toEqual({ "d": null })
+	}, 100)
+
+	test("documentReference[]!", async () => {
+		class Moc extends Doc {
+			@Field d: firebase.firestore.DocumentReference[] = [app.firestore().doc("a/a")]
+		}
+		const doc: Moc = new Moc()
+		expect(doc.data()).toEqual({ "d": [app.firestore().doc("a/a")] })
+	}, 100)
+
 	test("object", async () => {
 		class Moc extends Doc {
 			@Field o: { [key: string]: any } = { "a": "b" }
