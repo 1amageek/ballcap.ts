@@ -47,13 +47,17 @@ export class Doc extends Model implements DocumentType {
 		return this.constructor.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
 	}
 
-	public path(): string {
+	private _path(): string {
 		return `version/${this.version()}/${this.modelName()}`
 	}
 
-	public collectionReference(): CollectionReference {
-		return firestore.collection(this.path())
+	private _collectionReference(): CollectionReference {
+		return firestore.collection(this._path())
 	}
+
+	public path: string
+
+	public parent: CollectionReference
 
 	public subCollection(path: string) {
 		return this.documentReference.collection(path)
@@ -114,13 +118,17 @@ export class Doc extends Model implements DocumentType {
 		if (reference instanceof Object) {
 			ref = reference
 		} else if (typeof reference === "string") {
-			ref = firestore.doc(`${this.path()}/${reference}`)
+			ref = firestore.doc(`${this._path()}/${reference}`)
 		}
 		if (ref) {
 			this.documentReference = ref
+			this.parent = this.documentReference.parent
+			this.path = ref.path
 			this.id = ref.id
 		} else {
-			this.documentReference = this.collectionReference().doc()
+			this.documentReference = this._collectionReference().doc()
+			this.parent = this.documentReference.parent
+			this.path = this.documentReference.path
 			this.id = this.documentReference.id
 		}
 		for (const collectoin of this.subCollections()) {

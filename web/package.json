@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.3.0",
+  "version": "0.3.1",
   "scripts": {
     "lint": "./node_modules/.bin/tslint -p tslint.json",
     "build": "./node_modules/.bin/tsc -d",
@@ -44,11 +44,10 @@
     "reflect-metadata": "^0.1.12"
   },
   "devDependencies": {
-    "firebase": "^5.9.4",
-    "@firebase/testing": "^0.7.10",
+    "@firebase/testing": "^0.9.0",
     "@types/jest": "^24.0.11",
     "@types/node": "^11.13.4",
-    "firebase-admin": "^7.2.0",
+    "firebase": "^5.11.0",
     "gaxios": "1.8.3",
     "jest": "^24.7.1",
     "ts-jest": "^24.0.2",
@@ -56,8 +55,7 @@
     "typescript": "^3.4.3"
   },
   "peerDependencies": {
-    "firebase": "^5.9.4",
-    "firebase-admin": "^7.2.0"
+    "firebase": "^5.9.4"
   },
   "resolutions": {
     "**/gaxios": "1.8.3"
