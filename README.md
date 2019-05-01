@@ -81,7 +81,7 @@ const user?: User = await User.get(firestore.doc("a/a"))
 ##### Convert from DocumentSnapshot
 
 ```typescript
-const user: User = await User.fromSnapshot(documentSnapshot)
+const user: User = User.fromSnapshot(documentSnapshot)
 ```
 
 ### Field
