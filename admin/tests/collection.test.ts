@@ -15,7 +15,7 @@ Ballcap.initialize(app.firestore())
 
 describe("Collection", () => {
 
-	test("Reference", async () => {
+	test("CollectionReference", async () => {
 		class Sub extends Doc {
 			@Field a: string = "a"
 			@Field b: string = `bb`
@@ -25,6 +25,18 @@ describe("Collection", () => {
 		}
 		const doc: Moc = new Moc("a")
 		expect(doc.collection.collectionReference.path).toEqual("version/1/moc/a/collection")
+	}, 10000)
+
+	test("DocumentReference", async () => {
+		class Sub extends Doc {
+			@Field a: string = "a"
+			@Field b: string = `bb`
+		}
+		class Moc extends Doc {
+			@SubCollection collection: Collection<Sub> = new Collection()
+		}
+		const doc: Moc = new Moc("a")
+		expect(doc.collection.doc("a", Sub).path).toEqual("version/1/moc/a/collection/a")
 	}, 10000)
 
 	test("SaveUpdateDelete with Batch", async () => {
