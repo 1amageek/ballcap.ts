@@ -3,7 +3,7 @@ import { Model } from './Model'
 import { DocumentType, Documentable } from './Documentable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
-import { firestore, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, SnapshotOptions, Transaction } from './index'
+import { firestore, rootReference, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, SnapshotOptions, Transaction } from './index'
 import { } from "reflect-metadata"
 
 export class Doc extends Model implements DocumentType {
@@ -32,11 +32,11 @@ export class Doc extends Model implements DocumentType {
 	}
 
 	public static path(): string {
-		return `version/${this.version()}/${this.modelName()}`
+		return this.collectionReference().path
 	}
 
 	public static collectionReference(): CollectionReference {
-		return firestore.collection(this.path())
+		return firestore.collection(this.modelName())
 	}
 
 	public version(): string {
@@ -47,12 +47,8 @@ export class Doc extends Model implements DocumentType {
 		return this.constructor.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
 	}
 
-	private _path(): string {
-		return `version/${this.version()}/${this.modelName()}`
-	}
-
 	private _collectionReference(): CollectionReference {
-		return firestore.collection(this._path())
+		return rootReference.collection(this.modelName())
 	}
 
 	public path: string
@@ -121,7 +117,7 @@ export class Doc extends Model implements DocumentType {
 		if (reference instanceof Object) {
 			ref = reference
 		} else if (typeof reference === "string") {
-			ref = firestore.doc(`${this._path()}/${reference}`)
+			ref = rootReference.collection(this.modelName()).doc(`${reference}`)
 		}
 		if (ref) {
 			this.documentReference = ref
@@ -189,7 +185,7 @@ export class Doc extends Model implements DocumentType {
 		if (reference instanceof DocumentReference) {
 			ref = reference
 		} else {
-			ref = firestore.doc(`${this.path()}/${reference}`)
+			ref = rootReference.collection(this.modelName()).doc(`${reference}`)
 		}
 		try {
 			const snapshot: DocumentSnapshot = await ref.get()

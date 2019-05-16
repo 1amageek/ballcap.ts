@@ -10,7 +10,7 @@ import { } from "reflect-metadata"
 const app = firebase.initializeAdminApp({
 	projectId: "test-project"
 })
-Ballcap.initialize(app.firestore())
+Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
 
 describe("Collection", () => {
 
