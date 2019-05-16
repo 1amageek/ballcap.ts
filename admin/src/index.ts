@@ -25,8 +25,10 @@ import { Batch } from './Batch'
 export { Codable, Field, File, SubCollection, Model, Doc, Collection, Batch }
 
 export let firestore: firebase.firestore.Firestore
-export const initialize = (appFirestore: any) => {
+export let rootReference: firebase.firestore.Firestore | firebase.firestore.DocumentReference
+export const initialize = (appFirestore: any, root?: firebase.firestore.DocumentReference) => {
     firestore = appFirestore
+    rootReference = root || firestore
 }
 
 export import CollectionReference = firebase.firestore.CollectionReference
