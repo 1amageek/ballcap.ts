@@ -107,7 +107,7 @@ export class Address extends Model {
 	@Field country?: string
 }
 
-export class User extends Document {
+export class User extends Doc {
 	@Field name?: string
 	@Field thumbnailImage?: File
 	@Codable(Address)
