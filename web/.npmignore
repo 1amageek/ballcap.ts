@@ -3,3 +3,5 @@ src
 tests
 
 tsconfig.json
+
+.DS_Store
