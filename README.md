@@ -1,14 +1,19 @@
-# Ballcap-admin
-Cloud Firestore support library for admin. 🧢
+# ballcap for TypeScript
+
+<img src="https://github.com/1amageek/Ballcap-iOS/blob/master/Ballcap.png" width="100%">
+
+Ballcap is a database schema design framework for Cloud Firestore. This repository supports the __WEB__ and __Admin__.
 
 
-A library for defining Ballcap and Firestore's Document Scheme.
-Define Scheme by inheriting `Document` or `Model`. Use the `@Feild` decorator to define the Document's Fields.
+__Why Ballcap__
+
+Cloud Firestore is a great schema-less and flexible database that can handle data. However, its flexibility can create many bugs in development. Ballcap can assign schemas to Cloud Firestore to visualize data structures. This plays a very important role when developing as a team.
 
 ```typescript
 export class User extends Document {
 	@Field name?: string
 	@Field thumbnailImage?: File
+	@SubCollection items: Collection<Item> = new Collection()
 }
 ```
 
@@ -32,6 +37,14 @@ npm add @1amageek/ballcap-admin
 To use Ballcap, you need to initialize it.
 ```typescript
 Ballcap.initialize(app.firestore())
+```
+
+### RootReference
+
+Considering the extensibility of DB, it is recommended to provide a method of version control.
+
+```typescript
+Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
 ```
 
 ### CRUD
@@ -94,7 +107,7 @@ export class Address extends Model {
 	@Field country?: string
 }
 
-export class User extends Document {
+export class User extends Doc {
 	@Field name?: string
 	@Field thumbnailImage?: File
 	@Codable(Address)
