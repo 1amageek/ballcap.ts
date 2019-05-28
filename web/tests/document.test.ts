@@ -60,4 +60,25 @@ describe("Document", () => {
 		expect(doc.a).toEqual("a")
 		expect(doc.b).toEqual(`bb`)
 	}, 100)
+
+	test("fromDataWithIDOverrideModelName", async () => {
+		class Moc extends Doc {
+			@Field a: string = "a"
+			@Field b: string = `bb`
+			static modelName(): string {
+				return "model"
+			}
+			modelName(): string {
+				return "model"
+			}
+		}
+		const data = {
+			a: "a",
+			b: "bb"
+		}
+		const doc: Moc = Moc.fromData(data, "a")
+		expect(doc.documentReference.path).toEqual("version/1/model/a")
+		expect(doc.a).toEqual("a")
+		expect(doc.b).toEqual(`bb`)
+	}, 100)
 })
