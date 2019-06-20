@@ -127,8 +127,8 @@ export class Doc extends Model implements DocumentType {
 			this.path = this.documentReference.path
 			this.id = this.documentReference.id
 		}
-		for (const collectoin of this.subCollections()) {
-			this._defineCollection(collectoin)
+		for (const collection of this.subCollections()) {
+			this._defineCollection(collection)
 		}
 	}
 
