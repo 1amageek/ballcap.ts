@@ -31,6 +31,117 @@ __Admin(node.js)__
 npm add @1amageek/ballcap-admin
 ```
 
+## Get Started
+
+- [Expo](#Expo)
+- [React](#React)
+
+### Expo
+
+#### Create your first project
+
+```shell
+expo init new-project
+cd my-new-project
+npm add firebase @1amageek/ballcap
+```
+
+#### Edit `tsconfig.json`
+
+```JSON
+{
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "esnext",
+    "module": "commonjs",
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "lib": ["dom", "esnext"],
+    "jsx": "react-native",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
+  }
+}
+```
+
+#### Firebase and Ballcap initialize
+
+```typescript
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import * as firebase from 'firebase'
+import '@firebase/firestore'
+import * as Ballcap from '@1amageek/ballcap'
+
+const config = { ... }  // apiKey, authDomain, etc. (see above)
+const app = firebase.initializeApp(config)
+Ballcap.initialize(app.firestore())
+```
+
+### React
+
+#### Create your first project
+
+```shell
+npx create-react-app my-new-project
+cd my-new-project
+npm add firebase @1amageek/ballcap ts-loader
+react-scripts eject
+```
+
+#### Edit `webpack.config.js`
+
+```JavaScrict
+    
+    // Replace module
+    module: {
+      strictExportPresence: true,
+      rules: [
+        { parser: { requireEnsure: false } },
+        {
+          oneOf: [
+            {
+              test: /\.(js|mjs|jsx|ts|tsx)$/,
+              include: paths.appSrc,
+              loader: require.resolve('ts-loader')
+            }
+          ],
+        },
+      ],
+    },
+```
+
+#### Edit `tsconfig.json`
+
+```JSON
+{
+  "compilerOptions": {
+    "target": "es2015",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react"
+  },
+  "include": [
+    "src"
+  ]
+}
+```
+
 ## Usage
 
 ### Initialize
