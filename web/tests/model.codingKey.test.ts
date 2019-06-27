@@ -50,14 +50,12 @@ describe("CodingKey test", () => {
 				"_dd": [{s: "abc"}],
 				"_f": {
 					"mimeType": "",
-					"name": "",
 					"path": "",
 					"additionalData": {},
 					"url": null
 				},
 				"_ff": [{
 					"mimeType": "",
-					"name": "",
 					"path": "",
 					"additionalData": {},
 					"url": null
@@ -112,14 +110,12 @@ describe("CodingKey test", () => {
 			"_dd": [{s: "abc"}],
 			"_f": {
 				"mimeType": "",
-				"name": "",
 				"path": "",
 				"additionalData": {},
 				"url": null
 			},
 			"_ff": [{
 				"mimeType": "",
-				"name": "",
 				"path": "",
 				"additionalData": {},
 				"url": null
