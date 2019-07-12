@@ -1,0 +1,13 @@
+{
+  "extends": ["tslint:latest", "tslint-react"],
+  "rules": {
+    "quotemark": [true, "single"],
+    "no-submodule-imports": false,
+    "semicolon": [true, "never"],
+    "no-consecutive-blank-lines": false,
+    "indent": [true, "tabs", 2],
+    "no-empty-interface": false,
+    "interface-name": [true, "never-prefix"],
+    "trailing-comma": false,
+  }
+}
