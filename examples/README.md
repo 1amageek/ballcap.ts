@@ -26,23 +26,23 @@ __Add `next.config.js`.__
 const path = require('path');
 const targetDir = path.join(__dirname, 'src/app');
 const tsLoader = {
-	oneOf: [
-		{
-			test: /\.(js|mjs|jsx|ts|tsx)$/,
-			include: [
-				targetDir
-			],
-			use: [{
-				loader: 'ts-loader'
-			}]
-		}
-	]
+  oneOf: [
+    {
+      test: /\.(js|mjs|jsx|ts|tsx)$/,
+      include: [
+        targetDir
+      ],
+      use: [{
+        loader: 'ts-loader'
+      }]
+    }
+  ]
 }
 module.exports = {
-	webpack: (config) => {
-		config.module.rules.push(tsLoader)
-		return config;
-	}
+  webpack: (config) => {
+    config.module.rules.push(tsLoader)
+    return config;
+  }
 }
 ```
 
@@ -50,19 +50,19 @@ __Add `.babelrc`.__
 
 ```json
 {
-	"presets": [
-		[
-			"next/babel",
-			{
-				"preset-env": {
-					"targets": {
-						"esmodules": true
-					},
-					"loose": false
-				}
-			}
-		]
-	]
+  "presets": [
+    [
+      "next/babel",
+      {
+        "preset-env": {
+          "targets": {
+            "esmodules": true
+          },
+          "loose": false
+        }
+      }
+    ]
+  ]
 }
 ```
 
@@ -82,8 +82,8 @@ __Edit `src/app/tsconfig.json`__
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": false,
     "strict": true,
-	"strictNullChecks": true,
-	"experimentalDecorators": true,
+  "strictNullChecks": true,
+  "experimentalDecorators": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "preserveConstEnums": true,
@@ -127,7 +127,7 @@ src/app/models/item.ts
 import { Doc, Field } from '@1amageek/ballcap'
 
 export default class Item extends Doc {
-	@Field name?: string
+  @Field name?: string
 }
 ```
 
