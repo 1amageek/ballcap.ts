@@ -12,12 +12,12 @@ cd hosting
 
 Install React, Next, Firebase and Ballcap
 ```
-npm add react react-dom next typescript firebase @1amageek/ballcap
+npm add react react-dom next firebase @1amageek/ballcap
 ```
 
 Install devDependency
 ```
-npm install --save-dev @types/react @types/node ts-loader
+npm install --save-dev @types/react @types/node typescript ts-loader
 ```
 
 __Add `next.config.js`.__
