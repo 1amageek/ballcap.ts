@@ -20,27 +20,27 @@ Install devDependency
 npm install --save-dev @types/react @types/node typescript ts-loader
 ```
 
-__Add `next.config.js`.__
+__Edit `next.config.js`.__
 
 ```javascript
-const path = require('path');
-const targetDir = path.join(__dirname, 'src/app');
-const tsLoader = {
-  oneOf: [
-    {
-      test: /\.(js|mjs|jsx|ts|tsx)$/,
-      include: [
-        targetDir
-      ],
-      use: [{
-        loader: 'ts-loader'
-      }]
-    }
-  ]
-}
 module.exports = {
-  webpack: (config) => {
-    config.module.rules.push(tsLoader)
+  distDir: '../../dist/functions/next',
+  webpack: (config, options) => {
+    const { dev, isServer, buildId, dir } = options
+    config.module.rules.push(
+      {
+        oneOf: [
+          {
+            test: /\.(js|mjs|jsx|ts|tsx)$/,
+            include: dir,
+            exclude: /node_modules/,
+            use: [{
+              loader: 'ts-loader'
+            }]
+          }
+        ]
+      }
+    )
     return config;
   }
 }
@@ -90,6 +90,7 @@ __Edit `src/app/tsconfig.json`__
     "skipLibCheck": true,
     "sourceMap": true,
     "noEmit": false,
+    "outDir": "../../dist/app",
     "lib": [
       "es6",
       "dom",
