@@ -36,7 +36,7 @@ export class Doc extends Model implements DocumentType {
 	}
 
 	public static collectionReference(): CollectionReference {
-		return firestore.collection(this.modelName())
+		return rootReference.collection(this.modelName())
 	}
 
 	public version(): string {
