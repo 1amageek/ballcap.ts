@@ -3,7 +3,7 @@ import { Model } from './Model'
 import { DocumentType, Documentable } from './Documentable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
-import { firestore, rootReference, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, Transaction } from './index'
+import { rootReference, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, Transaction } from './index'
 import { } from "reflect-metadata"
 
 export class Doc extends Model implements DocumentType {
