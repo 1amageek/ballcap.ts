@@ -44,7 +44,7 @@ export class Doc extends Model implements DocumentType {
 	}
 
 	public modelName(): string {
-		return this.constructor.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
+		return (this.constructor as any).modelName()
 	}
 
 	private _collectionReference(): CollectionReference {
