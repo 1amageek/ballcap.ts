@@ -79,7 +79,9 @@ export class Model implements DataRepresentable {
 	}
 
 	private _encode(value: any): any {
-		if (value instanceof Model) {
+		if (File.is(value)) {
+			return value.data()
+		} else if (value instanceof Model) {
 			return value.data()
 		} else if (value instanceof Array) {
 			let container = []
