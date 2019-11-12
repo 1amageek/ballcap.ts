@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import * as firebase from '@firebase/testing'
 import * as Ballcap from "../src/index"
 import { Doc } from '../src/Document'
@@ -5,7 +6,6 @@ import { Collection } from '../src/Collection'
 import { Field } from '../src/Field'
 import { SubCollection } from '../src/SubCollection'
 import { Batch } from '../src/Batch'
-import { } from "reflect-metadata"
 
 const app = firebase.initializeAdminApp({
 	projectId: "test-project"

@@ -1,8 +1,8 @@
+import "reflect-metadata"
 import * as firebase from '@firebase/testing'
 import * as Ballcap from "../src/index"
 import { Doc } from '../src/Document'
 import { Field } from '../src/Field'
-import { } from "reflect-metadata"
 
 const app = firebase.initializeAdminApp({
 	projectId: "test-project"

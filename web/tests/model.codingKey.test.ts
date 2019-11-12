@@ -1,9 +1,8 @@
+import "reflect-metadata"
 import { Model } from '../src/Model'
-import { } from "reflect-metadata"
 import { Field } from '../src/Field'
 import { Codable } from '../src/Codable'
 import { File } from '../src/File'
-
 
 describe("CodingKey test", () => {
 

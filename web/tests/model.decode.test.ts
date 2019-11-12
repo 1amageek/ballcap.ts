@@ -1,9 +1,8 @@
+import "reflect-metadata"
 import { Model } from '../src/Model'
 import { File } from '../src/File'
 import { Field } from '../src/Field'
-import { } from "reflect-metadata"
 import { Codable } from '../src/Codable'
-
 
 describe("Model Fields", () => {
 
