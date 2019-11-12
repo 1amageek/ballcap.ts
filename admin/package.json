@@ -41,21 +41,21 @@
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "dependencies": {
-    "reflect-metadata": "^0.1.12"
+    "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@firebase/testing": "^0.13.0",
+    "@firebase/testing": "^0.15.0",
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.4",
-    "firebase-admin": "^8.5.0",
+    "firebase-admin": "^8.7.0",
     "gaxios": "^2.0.1",
     "jest": "^24.8.0",
     "ts-jest": "^24.0.2",
-    "tslint": "^5.19.0",
-    "typescript": "^3.6.2"
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2"
   },
   "peerDependencies": {
-    "firebase-admin": "^8.5.0"
+    "firebase-admin": "^8.7.0"
   },
   "resolutions": {
     "**/gaxios": "1.8.3"

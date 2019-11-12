@@ -4,7 +4,7 @@ import { DocumentType, Documentable } from './Documentable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
 import { rootReference, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, Transaction } from './index'
-import { } from "reflect-metadata"
+import "reflect-metadata"
 
 export class Doc extends Model implements DocumentType {
 
@@ -47,7 +47,7 @@ export class Doc extends Model implements DocumentType {
 		return (this.constructor as any).modelName()
 	}
 
-	private _collectionReference(): CollectionReference {
+	public parentReference(): CollectionReference {
 		return rootReference.collection(this.modelName())
 	}
 
@@ -55,7 +55,7 @@ export class Doc extends Model implements DocumentType {
 
 	public parent: CollectionReference
 
-	public subCollection(path: string) {
+	public subCollection(path: string): CollectionReference {
 		return this.documentReference.collection(path)
 	}
 
@@ -114,7 +114,7 @@ export class Doc extends Model implements DocumentType {
 		if (reference instanceof Object) {
 			ref = reference
 		} else if (typeof reference === "string") {
-			ref = rootReference.collection(this.modelName()).doc(`${reference}`)
+			ref = this.parentReference().doc(`${reference}`)
 		}
 		if (ref) {
 			this.documentReference = ref
@@ -122,7 +122,7 @@ export class Doc extends Model implements DocumentType {
 			this.path = ref.path
 			this.id = ref.id
 		} else {
-			this.documentReference = this._collectionReference().doc()
+			this.documentReference = this.parentReference().doc()
 			this.parent = this.documentReference.parent
 			this.path = this.documentReference.path
 			this.id = this.documentReference.id
