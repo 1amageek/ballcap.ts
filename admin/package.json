@@ -7,13 +7,16 @@
   "version": "0.5.0",
   "scripts": {
     "lint": "./node_modules/.bin/tslint -p tslint.json",
-    "build": "./node_modules/.bin/tsc -d",
+    "clean": "rimraf lib",
+    "compile": "tsc",
+    "build": "npm run clean && npm run compile",
     "prepare": "npm run build",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase experimental:functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+    "logs": "firebase functions:log",
+    "test": "firebase emulators:exec jest"
   },
   "description": "Cloud Firestore model framework for TypeScript - Google",
   "contributors": [
@@ -50,6 +53,7 @@
     "firebase-admin": "^8.7.0",
     "gaxios": "^2.0.1",
     "jest": "^24.8.0",
+    "rimraf": "^3.0.0",
     "ts-jest": "^24.0.2",
     "tslint": "^5.20.1",
     "typescript": "^3.7.2"
@@ -59,19 +63,5 @@
   },
   "resolutions": {
     "**/gaxios": "1.8.3"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ]
   }
 }

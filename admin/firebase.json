@@ -1,0 +1,12 @@
+{
+  "firestore": {
+    "rules": "firestore.rules"
+  },
+  "functions": {
+    "predeploy": [
+      "npm run lint",
+      "npm run build"
+    ],
+    "source": "."
+  }
+}
