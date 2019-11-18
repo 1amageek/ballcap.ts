@@ -40,7 +40,7 @@ export class Doc extends Model implements DocumentType {
 	}
 
 	public version(): string {
-		return "1"
+		return (this.constructor as any).version()
 	}
 
 	public modelName(): string {
