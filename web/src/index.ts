@@ -3,12 +3,12 @@ import * as firebase from 'firebase'
 /*
  * Protocol
  */
-import { Modelable } from './Modelable'
 import { DataRepresentable } from './DataRepresentable'
 import { Referenceable } from './Referenceable'
+import { ModelType, Modelable } from './Modelable'
 import { DocumentType, Documentable } from './Documentable'
 
-export { Modelable, DataRepresentable, Referenceable, DocumentType, Documentable }
+export { DataRepresentable, Referenceable, ModelType, Modelable, DocumentType, Documentable }
 
 /*
  * Class
