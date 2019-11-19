@@ -1,10 +1,19 @@
-import { DocumentData } from './index'
+import { DocumentData, ModelType, Modelable} from './index'
 import { CodableSymbol } from './Codable'
 import { FieldSymbol } from './Field'
-import { DataRepresentable } from './DataRepresentable'
 import { File } from './File'
 
-export class Model implements DataRepresentable {
+export class Model implements ModelType {
+
+	public static model<T extends Model>(): Modelable<T> {
+		const type: Modelable<T> = this
+		return type
+	}
+
+	public static init<T extends Model>(): T {
+		const model = new this() as T
+		return model
+	}
 
 	public static from<T extends Model>(data: { [feild: string]: any }): T {
 		const model = new this() as T
