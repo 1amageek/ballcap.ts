@@ -59,7 +59,7 @@ export class Doc extends Model implements DocumentType {
 		return this.documentReference.collection(path)
 	}
 
-	public static init<T extends Doc>(reference?: string | DocumentReference): T {
+	public static init<T extends Doc | Model>(reference?: string | DocumentReference): T {
 		const model = new this(reference) as T
 		return model
 	}
