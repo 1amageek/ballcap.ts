@@ -47,10 +47,6 @@ export class Doc extends Model implements DocumentType {
 		return (this.constructor as any).modelName()
 	}
 
-	public parentReference(): CollectionReference {
-		return rootReference.collection(this.modelName())
-	}
-
 	public path: string
 
 	public parent: CollectionReference
@@ -114,7 +110,7 @@ export class Doc extends Model implements DocumentType {
 		if (reference instanceof Object) {
 			ref = reference
 		} else if (typeof reference === "string") {
-			ref = this.parentReference().doc(`${reference}`)
+			ref = (this.constructor as any).collectionReference().doc(`${reference}`)
 		}
 		if (ref) {
 			this.documentReference = ref
@@ -122,7 +118,7 @@ export class Doc extends Model implements DocumentType {
 			this.path = ref.path
 			this.id = ref.id
 		} else {
-			this.documentReference = this.parentReference().doc()
+			this.documentReference = (this.constructor as any).collectionReference().doc()
 			this.parent = this.documentReference.parent
 			this.path = this.documentReference.path
 			this.id = this.documentReference.id
