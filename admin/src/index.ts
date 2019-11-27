@@ -36,7 +36,6 @@ export import DocumentData = firebase.firestore.DocumentData
 export import DocumentReference = firebase.firestore.DocumentReference
 export import DocumentSnapshot = firebase.firestore.DocumentSnapshot
 export import FieldPath = firebase.firestore.FieldPath
-export import FieldValue = firebase.firestore.FieldValue
 export import Firestore = firebase.firestore.Firestore
 export import GeoPoint = firebase.firestore.GeoPoint
 export import Query = firebase.firestore.Query
@@ -45,3 +44,10 @@ export import QuerySnapshot = firebase.firestore.QuerySnapshot
 export import Timestamp = firebase.firestore.Timestamp
 export import Transaction = firebase.firestore.Transaction
 export import WriteBatch = firebase.firestore.WriteBatch
+
+// FieldValue
+let fieldValue: any
+export const setFieldValue = (aFieldValue: any) => {
+    fieldValue = aFieldValue
+}
+export const FieldValue = fieldValue || firebase.firestore.FieldValue
