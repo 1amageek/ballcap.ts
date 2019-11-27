@@ -46,8 +46,7 @@ export import Transaction = firebase.firestore.Transaction
 export import WriteBatch = firebase.firestore.WriteBatch
 
 // FieldValue
-let fieldValue: any
-export const setFieldValue = (aFieldValue: any) => {
-    fieldValue = aFieldValue
+export let FieldValue: any = firebase.firestore.FieldValue
+export const setFieldValue = (fieldValue: any) => {
+    FieldValue = fieldValue
 }
-export const FieldValue = fieldValue || firebase.firestore.FieldValue
