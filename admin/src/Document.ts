@@ -175,7 +175,7 @@ export class Doc extends Model implements DocumentType {
 		if (reference instanceof DocumentReference) {
 			ref = reference
 		} else {
-			ref = rootReference.collection(this.modelName()).doc(`${reference}`)
+			ref = this.collectionReference().doc(`${reference}`)
 		}
 		try {
 			const snapshot: DocumentSnapshot = await ref.get()
