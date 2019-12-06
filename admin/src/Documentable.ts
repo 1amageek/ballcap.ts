@@ -3,7 +3,7 @@ import { Referenceable } from './Referenceable'
 import { DataRepresentable } from './DataRepresentable'
 import { DataManagable } from './DataManagable'
 
-export interface DocumentType extends Referenceable, DataRepresentable, DataManagable { 
+export interface DocumentType extends Referenceable, DataRepresentable, DataManagable {
 
 	snapshot?: DocumentSnapshot
 

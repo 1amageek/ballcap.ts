@@ -1,4 +1,4 @@
-import { DocumentData, ModelType, Modelable} from './index'
+import { DocumentData, ModelType, Modelable } from './index'
 import { CodableSymbol } from './Codable'
 import { FieldSymbol } from './Field'
 import { File } from './File'

@@ -27,8 +27,8 @@ export { Codable, Field, File, SubCollection, Model, Doc, Collection, Batch }
 export let firestore: firebase.firestore.Firestore
 export let rootReference: firebase.firestore.Firestore | firebase.firestore.DocumentReference
 export const initialize = (appFirestore: any, root?: firebase.firestore.DocumentReference) => {
-    firestore = appFirestore
-    rootReference = root || firestore
+	firestore = appFirestore
+	rootReference = root || firestore
 }
 
 export import CollectionReference = firebase.firestore.CollectionReference
@@ -48,5 +48,5 @@ export import WriteBatch = firebase.firestore.WriteBatch
 // FieldValue
 export let FieldValue: any = firebase.firestore.FieldValue
 export const setFieldValue = (fieldValue: any) => {
-    FieldValue = fieldValue
+	FieldValue = fieldValue
 }

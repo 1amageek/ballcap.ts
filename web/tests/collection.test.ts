@@ -46,7 +46,7 @@ describe("Collection", () => {
 		class Moc extends Doc {
 			@SubCollection c: Collection<Sub> = new Collection()
 		}
-		
+
 		{
 			const doc: Moc = new Moc("b")
 			const a: Sub = new Sub("a")

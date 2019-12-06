@@ -136,11 +136,11 @@ export class Doc extends Model implements DocumentType {
 	public async fetch(transaction?: Transaction) {
 		try {
 			let snapshot: DocumentSnapshot
-            if (transaction) {
-                snapshot = await transaction.get(this.documentReference)
-            } else {
-                snapshot = await this.documentReference.get()
-            }
+			if (transaction) {
+				snapshot = await transaction.get(this.documentReference)
+			} else {
+				snapshot = await this.documentReference.get()
+			}
 			this.snapshot = snapshot
 			const data = snapshot.data()
 			if (data) {

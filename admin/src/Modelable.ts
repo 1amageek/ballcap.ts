@@ -1,7 +1,7 @@
 import { DataRepresentable } from './DataRepresentable'
 
 export interface ModelType extends DataRepresentable {
-	
+
 }
 
 export interface Modelable<T extends ModelType> {

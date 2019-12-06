@@ -9,7 +9,7 @@ import { } from "reflect-metadata"
 
 const secret = require("./secret.json")
 const app = firebase.initializeApp({
-    credential: firebase.credential.cert(secret)
+	credential: firebase.credential.cert(secret)
 })
 Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
 
@@ -47,7 +47,7 @@ describe("Collection", () => {
 		class Moc extends Doc {
 			@SubCollection c: Collection<Sub> = new Collection()
 		}
-		
+
 		{
 			const doc: Moc = new Moc("b")
 			const a: Sub = new Sub("a")

@@ -45,8 +45,8 @@ describe("CodingKey test", () => {
 		expect(d.data()).toEqual(
 			{
 				"_b": false,
-				"_d": {s: "abc"},
-				"_dd": [{s: "abc"}],
+				"_d": { s: "abc" },
+				"_dd": [{ s: "abc" }],
 				"_f": {
 					"mimeType": "",
 					"path": "",
@@ -105,8 +105,8 @@ describe("CodingKey test", () => {
 		}
 		const d: Doc = Doc.from({
 			"_b": false,
-			"_d": {s: "abc"},
-			"_dd": [{s: "abc"}],
+			"_d": { s: "abc" },
+			"_dd": [{ s: "abc" }],
 			"_f": {
 				"mimeType": "",
 				"path": "",

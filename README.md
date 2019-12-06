@@ -232,11 +232,11 @@ Use SubCollection and Collection to represent SubCollection.
 
 ```typescript
 class Charge extends Doc {
-    @Field amount: number = 0
-    @Field userID!: string
+  @Field amount: number = 0
+  @Field userID!: string
 }
 class User extends Doc {
-    @SubCollection charges: Collection<Charge> = new Collection()
+  @SubCollection charges: Collection<Charge> = new Collection()
 }
 ```
 

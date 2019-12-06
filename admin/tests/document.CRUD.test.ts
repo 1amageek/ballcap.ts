@@ -7,7 +7,7 @@ import { Batch } from '../src/Batch'
 
 const secret = require("./secret.json")
 const app = firebase.initializeApp({
-    credential: firebase.credential.cert(secret)
+	credential: firebase.credential.cert(secret)
 })
 Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
 

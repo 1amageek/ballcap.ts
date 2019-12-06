@@ -4,7 +4,7 @@ export interface DataManagable {
 
 	fetch(transaction?: Transaction): Promise<this>
 
- 	save(): Promise<void>
+	save(): Promise<void>
 
 	update(): Promise<void>
 
