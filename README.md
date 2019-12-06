@@ -214,15 +214,15 @@ A Field can have another Document. In that case, use the `@Codable` decorator.
 
 ```typescript
 export class Address extends Model {
-	@Field postCode?: string
-	@Field country?: string
+  @Field postCode?: string
+  @Field country?: string
 }
 
 export class User extends Doc {
-	@Field name?: string
-	@Field thumbnailImage?: File
-	@Codable(Address)
-	@Field address: Address[] = []
+  @Field name?: string
+  @Field thumbnailImage?: File
+  @Codable(Address)
+  @Field address: Address[] = []
 }
 ```
 
