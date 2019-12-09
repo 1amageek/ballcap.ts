@@ -182,6 +182,12 @@ await user.upate()
 await user.delete()
 ```
 
+Get JSON
+
+```typescript
+const data = user.data()
+```
+
 __Batch__
 
 ```typescript
