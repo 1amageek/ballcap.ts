@@ -1,10 +1,9 @@
-import { firestore } from './index'
 import { Batch } from './Batch'
 import { Model } from './Model'
 import { DocumentType, Documentable } from './Documentable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
-import { DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, Transaction } from './index'
+import { firestore, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, Transaction } from './index'
 import "reflect-metadata"
 
 export class Doc extends Model implements DocumentType {
@@ -34,10 +33,6 @@ export class Doc extends Model implements DocumentType {
 
 	public static collectionReference() {
 		return firestore.collection(this.modelName())
-	}
-
-	public version(): string {
-		return (this.constructor as any).version()
 	}
 
 	public modelName(): string {
