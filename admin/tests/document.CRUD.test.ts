@@ -1,5 +1,5 @@
 import * as firebase from 'firebase-admin'
-import * as Ballcap from "../src/index"
+import * as Ballcap from '../src/index'
 import { Doc } from '../src/Document'
 import { Field } from '../src/Field'
 import { } from "reflect-metadata"
@@ -9,7 +9,7 @@ const secret = require("./secret.json")
 const app = firebase.initializeApp({
 	credential: firebase.credential.cert(secret)
 })
-Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
+Ballcap.initialize(app)
 
 describe("Doc CRUD", () => {
 

@@ -267,13 +267,13 @@ describe("Model Fields", () => {
 
 	test("file", async () => {
 		class Doc extends Model {
-			@Field f: File = File.from({ mimeType: "mimeType", path: "path", url: null, additionalData: {} })
+			@Field f: File = File.from({ mimeType: "mimeType", path: "path", url: null, metadata: {} })
 		}
 		const doc: Doc = new Doc()
-		expect(doc.f).toEqual(File.from({ mimeType: "mimeType", path: "path", url: null, additionalData: {} }))
+		expect(doc.f).toEqual(File.from({ mimeType: "mimeType", path: "path", url: null, metadata: {} }))
 		expect(doc.data()).toEqual({
 			"f": {
-				"mimeType": "mimeType", "path": "path", "url": null, "additionalData": {}
+				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}
 		})
 	}, 100)
@@ -291,26 +291,26 @@ describe("Model Fields", () => {
 
 	test("file!", async () => {
 		class Doc extends Model {
-			@Field f?: File = File.from({ mimeType: "mimeType", path: "path", url: null, additionalData: {} })
+			@Field f?: File = File.from({ mimeType: "mimeType", path: "path", url: null, metadata: {} })
 		}
 		const doc: Doc = new Doc()
-		expect(doc.f).toEqual(File.from({ mimeType: "mimeType", path: "path", url: null, additionalData: {} }))
+		expect(doc.f).toEqual(File.from({ mimeType: "mimeType", path: "path", url: null, metadata: {} }))
 		expect(doc.data()).toEqual({
 			"f": {
-				"mimeType": "mimeType", "path": "path", "url": null, "additionalData": {}
+				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}
 		})
 	}, 100)
 
 	test("file[]", async () => {
 		class Doc extends Model {
-			@Field f: File[] = [File.from({ mimeType: "mimeType", path: "path", url: null, additionalData: {} })]
+			@Field f: File[] = [File.from({ mimeType: "mimeType", path: "path", url: null, metadata: {} })]
 		}
 		const doc: Doc = new Doc()
-		expect(doc.f).toEqual([File.from({ mimeType: "mimeType", path: "path", url: null, additionalData: {} })])
+		expect(doc.f).toEqual([File.from({ mimeType: "mimeType", path: "path", url: null, metadata: {} })])
 		expect(doc.data()).toEqual({
 			"f": [{
-				"mimeType": "mimeType", "path": "path", "url": null, "additionalData": {}
+				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}]
 		})
 	}, 100)
@@ -328,13 +328,13 @@ describe("Model Fields", () => {
 
 	test("file[]!", async () => {
 		class Doc extends Model {
-			@Field f?: File[] = [File.from({ mimeType: "mimeType", path: "path", url: null, additionalData: {} })]
+			@Field f?: File[] = [File.from({ mimeType: "mimeType", path: "path", url: null, metadata: {} })]
 		}
 		const doc: Doc = new Doc()
-		expect(doc.f).toEqual([File.from({ mimeType: "mimeType", path: "path", url: null, additionalData: {} })])
+		expect(doc.f).toEqual([File.from({ mimeType: "mimeType", path: "path", url: null, metadata: {} })])
 		expect(doc.data()).toEqual({
 			"f": [{
-				"mimeType": "mimeType", "path": "path", "url": null, "additionalData": {}
+				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}]
 		})
 	}, 100)

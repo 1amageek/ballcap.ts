@@ -1,4 +1,5 @@
-import { firestore, FieldValue, WriteBatch, DocumentReference, CollectionReference } from './index'
+import { firestore } from './index'
+import { FieldValue, WriteBatch, DocumentReference, CollectionReference } from './index'
 import { DocumentType } from './Documentable'
 
 export class Batch {

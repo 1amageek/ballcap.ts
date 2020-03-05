@@ -11,7 +11,8 @@ const secret = require("./secret.json")
 const app = firebase.initializeApp({
 	credential: firebase.credential.cert(secret)
 })
-Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
+Ballcap.initialize(app)
+
 
 describe("Collection", () => {
 
@@ -24,7 +25,7 @@ describe("Collection", () => {
 			@SubCollection collection: Collection<Sub> = new Collection()
 		}
 		const doc: Moc = new Moc("a")
-		expect(doc.collection.collectionReference.path).toEqual("version/1/moc/a/collection")
+		expect(doc.collection.collectionReference.path).toEqual("moc/a/collection")
 	}, 10000)
 
 	test("DocumentReference", async () => {
@@ -36,7 +37,7 @@ describe("Collection", () => {
 			@SubCollection collection: Collection<Sub> = new Collection()
 		}
 		const doc: Moc = new Moc("a")
-		expect(doc.collection.doc("a", Sub).path).toEqual("version/1/moc/a/collection/a")
+		expect(doc.collection.doc("a", Sub).path).toEqual("moc/a/collection/a")
 	}, 10000)
 
 	test("SaveUpdateDelete with Batch", async () => {

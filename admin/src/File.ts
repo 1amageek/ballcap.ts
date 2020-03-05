@@ -4,7 +4,7 @@ export type FileType = {
 	mimeType: string
 	path: string
 	url: string | null
-	additionalData: { [key: string]: any }
+	metadata: { [key: string]: any } | null
 }
 
 export class File {
@@ -15,7 +15,7 @@ export class File {
 				arg.hasOwnProperty('mimeType') &&
 				arg.hasOwnProperty('path') &&
 				arg.hasOwnProperty('url') &&
-				arg.hasOwnProperty('additionalData')
+				arg.hasOwnProperty('metadata')
 		} else {
 			return false
 		}
@@ -33,7 +33,7 @@ export class File {
 
 	public url: string | null = null
 
-	public additionalData: { [key: string]: any } = {}
+	public metadata: { [key: string]: any } | null = null
 
 	public constructor() { }
 
@@ -41,7 +41,7 @@ export class File {
 		this.mimeType = data.mimeType
 		this.path = data.path
 		this.url = data.url
-		this.additionalData = data.additionalData
+		this.metadata = data.metadata
 	}
 
 	public data(): DocumentData {
@@ -49,7 +49,7 @@ export class File {
 			mimeType: this.mimeType,
 			path: this.path,
 			url: this.url,
-			additionalData: this.additionalData
+			metadata: this.metadata
 		}
 	}
 }
