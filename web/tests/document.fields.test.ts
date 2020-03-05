@@ -7,7 +7,7 @@ import { Field } from '../src/Field'
 const app = firebase.initializeAdminApp({
 	projectId: "test-project"
 })
-Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
+Ballcap.initialize(app)
 
 describe("Doc Fields", () => {
 

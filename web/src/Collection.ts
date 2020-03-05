@@ -1,22 +1,25 @@
-import { firestore, CollectionReference, DocumentReference } from './index'
+import { CollectionReference, DocumentReference } from './index'
 import { Documentable, DocumentType } from './Documentable'
 
 export class Collection<T extends DocumentType> extends Array<T> {
 
-	public collectionReference: CollectionReference
+	public collectionReference!: CollectionReference
 
-	public id: string
+	public id!: string
 
-	public path: string
+	public path!: string
 
-	public parent: DocumentReference | null
+	public parent: DocumentReference | null = null
 
-	constructor(collectionReference?: CollectionReference) {
+	constructor() {
 		super()
-		this.collectionReference = collectionReference || firestore.collection("version")
-		this.id = this.collectionReference.id
-		this.path = this.collectionReference.path
-		this.parent = this.collectionReference.parent
+	}
+
+	setCollectionReference(collectionReference: CollectionReference) {
+		this.collectionReference = collectionReference
+		this.id = collectionReference.id
+		this.path = collectionReference.path
+		this.parent = collectionReference.parent
 	}
 
 	public doc<U extends Documentable<T>>(id: string, type: U): T {

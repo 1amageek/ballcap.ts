@@ -50,13 +50,13 @@ describe("CodingKey test", () => {
 				"_f": {
 					"mimeType": "",
 					"path": "",
-					"additionalData": {},
+					"metadata": null,
 					"url": null
 				},
 				"_ff": [{
 					"mimeType": "",
 					"path": "",
-					"additionalData": {},
+					"metadata": null,
 					"url": null
 				}],
 				"_n": 123,
@@ -110,13 +110,13 @@ describe("CodingKey test", () => {
 			"_f": {
 				"mimeType": "",
 				"path": "",
-				"additionalData": {},
+				"metadata": null,
 				"url": null
 			},
 			"_ff": [{
 				"mimeType": "",
 				"path": "",
-				"additionalData": {},
+				"metadata": null,
 				"url": null
 			}],
 			"_n": 123,

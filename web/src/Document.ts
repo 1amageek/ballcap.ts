@@ -3,7 +3,7 @@ import { Model } from './Model'
 import { DocumentType, Documentable } from './Documentable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
-import { rootReference, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, SnapshotOptions, Transaction } from './index'
+import { firestore, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, SnapshotOptions, Transaction } from './index'
 import "reflect-metadata"
 
 export class Doc extends Model implements DocumentType {
@@ -23,10 +23,6 @@ export class Doc extends Model implements DocumentType {
 		return type
 	}
 
-	public static version(): string {
-		return "1"
-	}
-
 	public static modelName(): string {
 		return this.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
 	}
@@ -35,12 +31,8 @@ export class Doc extends Model implements DocumentType {
 		return this.collectionReference().path
 	}
 
-	public static collectionReference(): CollectionReference {
-		return rootReference.collection(this.modelName())
-	}
-
-	public version(): string {
-		return "1"
+	public static collectionReference() {
+		return firestore.collection(this.modelName())
 	}
 
 	public modelName(): string {
@@ -96,7 +88,7 @@ export class Doc extends Model implements DocumentType {
 			},
 			set: (newValue) => {
 				if (newValue instanceof Collection) {
-					newValue.collectionReference = this.documentReference.collection(key)
+					newValue.setCollectionReference(this.documentReference.collection(key))
 					this._subCollections[key] = newValue
 				}
 			}

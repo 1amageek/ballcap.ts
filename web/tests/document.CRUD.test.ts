@@ -5,10 +5,10 @@ import { Doc } from '../src/Document'
 import { Field } from '../src/Field'
 import { Batch } from '../src/Batch'
 
-const app = firebase.initializeAdminApp({
+const app = firebase.initializeTestApp({
 	projectId: "test-project"
 })
-Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
+Ballcap.initialize(app)
 
 describe("Doc CRUD", () => {
 

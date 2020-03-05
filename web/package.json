@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.5.6",
+	"version": "1.0.1",
   "scripts": {
     "lint": "./node_modules/.bin/tslint -p tslint.json",
     "build": "./node_modules/.bin/tsc -d",
@@ -13,7 +13,8 @@
     "shell": "npm run build && firebase experimental:functions:shell",
     "start": "npm run shell",
     "deploy": "firebase deploy --only functions",
-    "logs": "firebase functions:log"
+		"logs": "firebase functions:log",
+		"test": "jest"
   },
   "description": "Cloud Firestore model framework for TypeScript - Google",
   "contributors": [
@@ -44,17 +45,17 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@firebase/testing": "^0.15.0",
-    "@types/jest": "^24.0.18",
-    "@types/node": "^12.7.4",
-    "firebase": "^7.3.0",
-    "jest": "^24.9.0",
-    "ts-jest": "^24.1.0",
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "@firebase/testing": "^0.16.13",
+    "@types/jest": "^25.1.3",
+    "@types/node": "^13.7.7",
+    "firebase": "^7.9.3",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.1",
+    "tslint": "^6.0.0",
+    "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "firebase": "^7.3.0"
+    "firebase": "^7.9.3"
   },
   "resolutions": {
     "**/gaxios": "1.8.3"

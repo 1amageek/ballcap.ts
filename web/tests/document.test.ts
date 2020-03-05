@@ -7,7 +7,7 @@ import { Field } from '../src/Field'
 const app = firebase.initializeAdminApp({
 	projectId: "test-project"
 })
-Ballcap.initialize(app.firestore(), app.firestore().collection("version").doc("1"))
+Ballcap.initialize(app)
 
 describe("Document", () => {
 
@@ -17,7 +17,7 @@ describe("Document", () => {
 			@Field b: string = `bb`
 		}
 		const doc: Moc = new Moc("a")
-		expect(doc.documentReference.path).toEqual("version/1/moc/a")
+		expect(doc.documentReference.path).toEqual("moc/a")
 	}, 100)
 
 	test("documentReference", async () => {
@@ -40,7 +40,7 @@ describe("Document", () => {
 			b: "bb"
 		}
 		const doc: Moc = Moc.fromData(data, "a")
-		expect(doc.documentReference.path).toEqual("version/1/moc/a")
+		expect(doc.documentReference.path).toEqual("moc/a")
 		expect(doc.a).toEqual("a")
 		expect(doc.b).toEqual(`bb`)
 	}, 100)
@@ -77,7 +77,7 @@ describe("Document", () => {
 			b: "bb"
 		}
 		const doc: Moc = Moc.fromData(data, "a")
-		expect(doc.documentReference.path).toEqual("version/1/model/a")
+		expect(doc.documentReference.path).toEqual("model/a")
 		expect(doc.a).toEqual("a")
 		expect(doc.b).toEqual(`bb`)
 	}, 100)
