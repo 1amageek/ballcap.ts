@@ -73,6 +73,47 @@ describe("Doc CRUD", () => {
 		}
 	}, 10000)
 
+	test("InheritedMoc SaveUpdateDelete with Batch", async () => {
+		class Moc extends Doc {
+			@Field a: string = "a"
+			@Field b: string = `bb`
+		}
+
+		class InheritedMoc extends Moc {}
+
+		{
+			const doc: InheritedMoc = new InheritedMoc("b")
+			const batch = new Batch()
+			batch.save(doc)
+			await batch.commit()
+		}
+
+		{
+			const doc: InheritedMoc = await new InheritedMoc("b").fetch()
+			expect(doc.a).toEqual("a")
+			expect(doc.b).toEqual("bb")
+			doc.a = "aa"
+			doc.b = "bbbb"
+			const batch = new Batch()
+			batch.update(doc)
+			await batch.commit()
+		}
+
+		{
+			const doc = await InheritedMoc.get("b") as InheritedMoc
+			expect(doc.a).toEqual("aa")
+			expect(doc.b).toEqual("bbbb")
+			const batch = new Batch()
+			batch.delete(doc)
+			await batch.commit()
+		}
+
+		{
+			const doc = await InheritedMoc.get("b")
+			expect(doc).toBeUndefined()
+		}
+	}, 10000)
+
 	afterAll(() => {
 		app.delete()
 	})
