@@ -76,7 +76,7 @@ import * as Ballcap from '@1amageek/ballcap'
 
 const config = { ... }  // apiKey, authDomain, etc. (see above)
 const app = firebase.initializeApp(config)
-Ballcap.initialize(app.firestore())
+Ballcap.initialize(app)
 ```
 
 ### React
