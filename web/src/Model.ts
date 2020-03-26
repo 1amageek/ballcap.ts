@@ -1,7 +1,14 @@
-import { DocumentData, ModelType, Modelable } from './index'
+import { DocumentData, ModelType, Modelable, DocumentReference } from './index'
 import { CodableSymbol } from './Codable'
 import { FieldSymbol } from './Field'
 import { File } from './File'
+import { isDocumentReference } from './util'
+
+export declare namespace Model {
+	export type Opttion = {
+		convertDocumentReferenceToPath: boolean
+	}
+}
 
 export class Model implements ModelType {
 
@@ -72,14 +79,14 @@ export class Model implements ModelType {
 		}
 	}
 
-	public data(): DocumentData {
+	public data(option: Model.Opttion = { convertDocumentReferenceToPath: false }): DocumentData {
 		let data: { [feild: string]: any } = {}
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const descriptor = Object.getOwnPropertyDescriptor(this, field)
 			if (descriptor && descriptor.get) {
 				const value = descriptor.get()
-				data[codingKey] = this._encode(value)
+				data[codingKey] = this._encode(value, option)
 			} else {
 				data[codingKey] = null
 			}
@@ -87,17 +94,19 @@ export class Model implements ModelType {
 		return data
 	}
 
-	private _encode(value: any): any {
+	private _encode(value: any, option: Model.Opttion): any {
 		if (File.is(value)) {
-			return value.data()
+			return value.data(option)
 		} else if (value instanceof Model) {
-			return value.data()
+			return value.data(option)
 		} else if (value instanceof Array) {
 			let container = []
 			for (const i of value) {
-				container.push(this._encode(i))
+				container.push(this._encode(i, option))
 			}
 			return container
+		} else if (isDocumentReference(value) && option.convertDocumentReferenceToPath) {
+			return (value as DocumentReference).path
 		} else {
 			return value
 		}

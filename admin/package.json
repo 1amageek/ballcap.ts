@@ -44,18 +44,18 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@firebase/testing": "^0.15.0",
-    "@types/jest": "^24.0.18",
-    "@types/node": "^12.7.4",
-    "firebase-admin": "^8.7.0",
+    "@firebase/testing": "^0.17.1",
+    "@types/jest": "^25.1.4",
+    "@types/node": "^12.12.31",
+    "firebase-admin": "^8.10.0",
     "gaxios": "^2.0.1",
-    "jest": "^24.8.0",
-    "ts-jest": "^24.0.2",
-    "tslint": "^5.20.1",
-    "typescript": "^3.7.2"
+    "jest": "^25.2.0",
+    "ts-jest": "^25.2.1",
+    "tslint": "^6.1.0",
+    "typescript": "^3.8.3"
   },
   "peerDependencies": {
-    "firebase-admin": "^8.7.0"
+    "firebase-admin": "^8.10.0"
   },
   "resolutions": {
     "**/gaxios": "1.8.3"

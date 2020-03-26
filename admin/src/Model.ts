@@ -1,7 +1,14 @@
-import { DocumentData, ModelType, Modelable } from './index'
+import { DocumentData, ModelType, Modelable, DocumentReference } from './index'
 import { CodableSymbol } from './Codable'
 import { FieldSymbol } from './Field'
 import { File } from './File'
+import { isDocumentReference } from './util'
+
+export declare namespace Model {
+	export type Opttion = {
+		convertDocumentReference: boolean
+	}
+}
 
 export class Model implements ModelType {
 
@@ -15,9 +22,9 @@ export class Model implements ModelType {
 		return model
 	}
 
-	public static from<T extends Model>(data: { [feild: string]: any }): T {
+	public static from<T extends Model>(data: { [feild: string]: any }, option: Model.Opttion = { convertDocumentReference: false }): T {
 		const model = new this() as T
-		model._set(data)
+		model._set(data, option)
 		return model
 	}
 
@@ -36,25 +43,25 @@ export class Model implements ModelType {
 
 	protected _data: { [feild: string]: any } = {}
 
-	protected _set(data: { [feild: string]: any }) {
+	protected _set(data: { [feild: string]: any }, option: Model.Opttion) {
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const value = data[codingKey]
 			if (value === undefined) {
 				this._data[field] = null
 			} else {
-				this._data[field] = this._decode(value, field)
+				this._data[field] = this._decode(value, field, option)
 			}
 		}
 	}
 
-	private _decode(value: any, key: string): any {
+	private _decode(value: any, key: string, option: Model.Opttion): any {
 		if (File.is(value)) {
 			return File.from(value)
 		} else if (value instanceof Array) {
 			let container = []
 			for (const i of value) {
-				container.push(this._decode(i, key))
+				container.push(this._decode(i, key, option))
 			}
 			return container
 		} else if (value instanceof Object) {
@@ -72,14 +79,14 @@ export class Model implements ModelType {
 		}
 	}
 
-	public data(): DocumentData {
+	public data(option: Model.Opttion = { convertDocumentReference: false }): DocumentData {
 		let data: { [feild: string]: any } = {}
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const descriptor = Object.getOwnPropertyDescriptor(this, field)
 			if (descriptor && descriptor.get) {
 				const value = descriptor.get()
-				data[codingKey] = this._encode(value)
+				data[codingKey] = this._encode(value, option)
 			} else {
 				data[codingKey] = null
 			}
@@ -87,17 +94,23 @@ export class Model implements ModelType {
 		return data
 	}
 
-	private _encode(value: any): any {
+	private _encode(value: any, option: Model.Opttion): any {
 		if (File.is(value)) {
-			return value.data()
+			return value.data(option)
 		} else if (value instanceof Model) {
-			return value.data()
+			return value.data(option)
 		} else if (value instanceof Array) {
 			let container = []
 			for (const i of value) {
-				container.push(this._encode(i))
+				container.push(this._encode(i, option))
 			}
 			return container
+		} else if (isDocumentReference(value) && option.convertDocumentReference) {
+			const ref: DocumentReference = (value as DocumentReference)
+			return {
+				...(ref.firestore as any).app.options,
+				path: ref.path
+			}
 		} else {
 			return value
 		}
