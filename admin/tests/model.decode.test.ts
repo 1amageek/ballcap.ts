@@ -623,7 +623,6 @@ describe("Model Fields", () => {
 			@Field o: any = { "k": "v" }
 			@Field array: string[] = ["a", "b"]
 		}
-
 		class Child extends Model {
 			@Field s: string = "a"
 			@Field n: number = 0
@@ -654,6 +653,7 @@ describe("Model Fields", () => {
 		expect(doc.child.grandChild.n).toEqual(0)
 		expect(doc.child.grandChild.o).toEqual({ "k": "v" })
 		expect(doc.child.grandChild.array).toEqual(["a", "b"])
+		expect(doc.child.grandChild.ob.sub instanceof Model).toEqual(true)
 		const inheritedDoc = new Inherited()
 		expect(inheritedDoc.s).toEqual("a")
 		expect(inheritedDoc.n).toEqual(0)
