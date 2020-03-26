@@ -43,7 +43,7 @@ export class Model implements ModelType {
 
 	protected _data: { [feild: string]: any } = {}
 
-	protected _set(data: { [feild: string]: any }, option: Model.Opttion) {
+	protected _set(data: { [feild: string]: any }, option: Model.Opttion = { convertDocumentReference: false }) {
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const value = data[codingKey]
