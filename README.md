@@ -253,7 +253,7 @@ class User extends Doc {
 ```
 cd web
 jest
-``
+```
 
 ## Web
 
@@ -265,4 +265,4 @@ firebase serve --only firestore
 ```
 cd web
 jest
-``
+```
