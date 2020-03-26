@@ -1,7 +1,7 @@
 
 export const isDocumentReference = (value: any): boolean => {
 	if (!value) { return false }
-	return (value.hasOwnProperty('_key') && value.hasOwnProperty('firestore')) ||
+	return value.hasOwnProperty('firestore') ||
 		(value.hasOwnProperty('_firestore') && value.hasOwnProperty('_path')) ||
 		(Object.keys(value).length === 2 && value.hasOwnProperty('projectId') && value.hasOwnProperty('path'))
 }
