@@ -246,3 +246,23 @@ class User extends Doc {
 }
 ```
 
+# Test
+
+## Admin
+
+```
+cd web
+jest
+```
+
+## Web
+
+```
+firebase setup:emulators:firestore
+firebase serve --only firestore
+```
+
+```
+cd web
+jest
+```
