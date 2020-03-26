@@ -1,4 +1,5 @@
-import { DocumentData, ModelType, Modelable, DocumentReference, firestore } from './index'
+import { App } from './App'
+import { DocumentData, ModelType, Modelable, DocumentReference } from './index'
 import { CodableSymbol } from './Codable'
 import { FieldSymbol } from './Field'
 import { File } from './File'
@@ -65,7 +66,7 @@ export class Model implements ModelType {
 			}
 			return container
 		} else if (isDocumentReference(value) && option.convertDocumentReference) {
-			return firestore.doc(value.path)
+			return App.shared().firestore().doc(value.path)
 		} else if (value instanceof Object) {
 			const codingKeys = Reflect.getMetadata(CodableSymbol, this) || {}
 			const modelType = codingKeys[key]
