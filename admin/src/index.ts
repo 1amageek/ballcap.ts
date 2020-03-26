@@ -13,6 +13,7 @@ export { DataRepresentable, Referenceable, ModelType, Modelable, DocumentType, D
 /*
  * Class
  */
+import { App } from './App'
 import { Codable } from './Codable'
 import { Field } from './Field'
 import { File } from './File'
@@ -27,6 +28,7 @@ export { Codable, Field, File, SubCollection, Model, Doc, Collection, Batch }
 export let firestore: firebase.firestore.Firestore
 export const initialize = (app: firebase.app.App | any) => {
 	firestore = app.firestore()
+	App.shared().set(app)
 }
 
 export import CollectionReference = firebase.firestore.CollectionReference

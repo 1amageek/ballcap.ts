@@ -1,11 +1,12 @@
+import { App } from './App'
 import { DocumentData, ModelType, Modelable, DocumentReference } from './index'
 import { CodableSymbol } from './Codable'
 import { FieldSymbol } from './Field'
 import { File } from './File'
 import { isDocumentReference } from './util'
 
-export declare namespace Model {
-	export type Opttion = {
+export namespace Model {
+	export type Option = {
 		convertDocumentReference: boolean
 	}
 }
@@ -22,7 +23,7 @@ export class Model implements ModelType {
 		return model
 	}
 
-	public static from<T extends Model>(data: { [feild: string]: any }, option: Model.Opttion = { convertDocumentReference: false }): T {
+	public static from<T extends Model>(data: { [feild: string]: any }, option: Model.Option = { convertDocumentReference: false }): T {
 		const model = new this() as T
 		model._set(data, option)
 		return model
@@ -43,7 +44,7 @@ export class Model implements ModelType {
 
 	protected _data: { [feild: string]: any } = {}
 
-	protected _set(data: { [feild: string]: any }, option: Model.Opttion = { convertDocumentReference: false }) {
+	protected _set(data: { [feild: string]: any }, option: Model.Option = { convertDocumentReference: false }) {
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const value = data[codingKey]
@@ -55,7 +56,7 @@ export class Model implements ModelType {
 		}
 	}
 
-	private _decode(value: any, key: string, option: Model.Opttion): any {
+	private _decode(value: any, key: string, option: Model.Option): any {
 		if (File.is(value)) {
 			return File.from(value)
 		} else if (value instanceof Array) {
@@ -64,12 +65,14 @@ export class Model implements ModelType {
 				container.push(this._decode(i, key, option))
 			}
 			return container
+		} else if (isDocumentReference(value) && option.convertDocumentReference) {
+			return App.shared().firestore().doc(value.path)
 		} else if (value instanceof Object) {
 			const codingKeys = Reflect.getMetadata(CodableSymbol, this) || {}
 			const modelType = codingKeys[key]
 			if (modelType) {
 				const model = new modelType()
-				model._set(value)
+				model._set(value, option)
 				return model
 			} else {
 				return value
@@ -79,7 +82,7 @@ export class Model implements ModelType {
 		}
 	}
 
-	public data(option: Model.Opttion = { convertDocumentReference: false }): DocumentData {
+	public data(option: Model.Option = { convertDocumentReference: false }): DocumentData {
 		let data: { [feild: string]: any } = {}
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
@@ -94,7 +97,7 @@ export class Model implements ModelType {
 		return data
 	}
 
-	private _encode(value: any, option: Model.Opttion): any {
+	private _encode(value: any, option: Model.Option): any {
 		if (File.is(value)) {
 			return value.data(option)
 		} else if (value instanceof Model) {
