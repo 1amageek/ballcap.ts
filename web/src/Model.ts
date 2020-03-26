@@ -110,8 +110,10 @@ export class Model implements ModelType {
 			return container
 		} else if (isDocumentReference(value) && option.convertDocumentReference) {
 			const ref: DocumentReference = (value as DocumentReference)
+			const firestore = ref.firestore as any
+			const projectId = firestore._projectId || firestore.app.options.projectId
 			return {
-				...(ref.firestore as any).app.options,
+				projectId: projectId,
 				path: ref.path
 			}
 		} else {
