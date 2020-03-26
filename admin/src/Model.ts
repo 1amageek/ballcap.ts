@@ -4,6 +4,12 @@ import { FieldSymbol } from './Field'
 import { File } from './File'
 import { isDocumentReference } from './util'
 
+export namespace Model {
+	export type Option = {
+		convertDocumentReference: boolean
+	}
+}
+
 export class Model implements ModelType {
 
 	public static model<T extends Model>(): Modelable<T> {
@@ -16,7 +22,7 @@ export class Model implements ModelType {
 		return model
 	}
 
-	public static from<T extends Model>(data: { [feild: string]: any }, option: ModelType.Option = { convertDocumentReference: false }): T {
+	public static from<T extends Model>(data: { [feild: string]: any }, option: Model.Option = { convertDocumentReference: false }): T {
 		const model = new this() as T
 		model._set(data, option)
 		return model
@@ -37,7 +43,7 @@ export class Model implements ModelType {
 
 	protected _data: { [feild: string]: any } = {}
 
-	protected _set(data: { [feild: string]: any }, option: ModelType.Option = { convertDocumentReference: false }) {
+	protected _set(data: { [feild: string]: any }, option: Model.Option = { convertDocumentReference: false }) {
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const value = data[codingKey]
@@ -49,7 +55,7 @@ export class Model implements ModelType {
 		}
 	}
 
-	private _decode(value: any, key: string, option: ModelType.Option): any {
+	private _decode(value: any, key: string, option: Model.Option): any {
 		if (File.is(value)) {
 			return File.from(value)
 		} else if (value instanceof Array) {
@@ -75,7 +81,7 @@ export class Model implements ModelType {
 		}
 	}
 
-	public data(option: ModelType.Option = { convertDocumentReference: false }): DocumentData {
+	public data(option: Model.Option = { convertDocumentReference: false }): DocumentData {
 		let data: { [feild: string]: any } = {}
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
@@ -90,7 +96,7 @@ export class Model implements ModelType {
 		return data
 	}
 
-	private _encode(value: any, option: ModelType.Option): any {
+	private _encode(value: any, option: Model.Option): any {
 		if (File.is(value)) {
 			return value.data(option)
 		} else if (value instanceof Model) {
