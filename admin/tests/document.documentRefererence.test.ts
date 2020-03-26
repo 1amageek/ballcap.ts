@@ -56,17 +56,36 @@ describe("DocumentReference", () => {
 
 	test("decode", async () => {
 		class Sub extends Doc {
-			@Field a: firebase.firestore.DocumentReference = app.firestore().doc('a/a')
-			@Field b: firebase.firestore.DocumentReference = app.firestore().doc('a/b')
+			@Field a!: firebase.firestore.DocumentReference
+			@Field b!: firebase.firestore.DocumentReference
 		}
 		class Moc extends Doc {
-			@Field a: firebase.firestore.DocumentReference = app.firestore().doc('a/a')
-			@Field b: firebase.firestore.DocumentReference = app.firestore().doc('a/b')
+			@Field a!: firebase.firestore.DocumentReference
+			@Field b!: firebase.firestore.DocumentReference
 			@Codable(Sub)
-			@Field s: Sub = new Sub()
+			@Field s!: Sub
 		}
-		const doc: Moc = new Moc()
-		expect(doc.data()).toEqual({
+		const converted: Moc = Moc.from({
+			a: {
+				projectId: 'test-project',
+				path: 'a/a'
+			},
+			b: {
+				projectId: 'test-project',
+				path: 'a/b'
+			},
+			s: {
+				a: {
+					projectId: 'test-project',
+					path: 'a/a'
+				},
+				b: {
+					projectId: 'test-project',
+					path: 'a/b'
+				}
+			}
+		}, {convertDocumentReference: true})
+		expect(converted.data()).toEqual({
 			a: app.firestore().doc('a/a'),
 			b: app.firestore().doc('a/b'),
 			s: {
@@ -74,7 +93,99 @@ describe("DocumentReference", () => {
 				b: app.firestore().doc('a/b'),
 			}
 		})
-		expect(doc.data({ convertDocumentReference: true })).toEqual({
+
+		const convertedFromData: Moc = Moc.fromData({
+			a: {
+				projectId: 'test-project',
+				path: 'a/a'
+			},
+			b: {
+				projectId: 'test-project',
+				path: 'a/b'
+			},
+			s: {
+				a: {
+					projectId: 'test-project',
+					path: 'a/a'
+				},
+				b: {
+					projectId: 'test-project',
+					path: 'a/b'
+				}
+			}
+		}, undefined, {convertDocumentReference: true})
+
+		expect(convertedFromData.data()).toEqual({
+			a: app.firestore().doc('a/a'),
+			b: app.firestore().doc('a/b'),
+			s: {
+				a: app.firestore().doc('a/a'),
+				b: app.firestore().doc('a/b'),
+			}
+		})
+
+		const doc: Moc = Moc.from({
+			a: {
+				projectId: 'test-project',
+				path: 'a/a'
+			},
+			b: {
+				projectId: 'test-project',
+				path: 'a/b'
+			},
+			s: {
+				a: {
+					projectId: 'test-project',
+					path: 'a/a'
+				},
+				b: {
+					projectId: 'test-project',
+					path: 'a/b'
+				}
+			}
+		})
+		expect(doc.data()).toEqual({
+			a: {
+				projectId: 'test-project',
+				path: 'a/a'
+			},
+			b: {
+				projectId: 'test-project',
+				path: 'a/b'
+			},
+			s: {
+				a: {
+					projectId: 'test-project',
+					path: 'a/a'
+				},
+				b: {
+					projectId: 'test-project',
+					path: 'a/b'
+				}
+			}
+		})
+
+		const docFromData: Moc = Moc.fromData({
+			a: {
+				projectId: 'test-project',
+				path: 'a/a'
+			},
+			b: {
+				projectId: 'test-project',
+				path: 'a/b'
+			},
+			s: {
+				a: {
+					projectId: 'test-project',
+					path: 'a/a'
+				},
+				b: {
+					projectId: 'test-project',
+					path: 'a/b'
+				}
+			}
+		})
+		expect(docFromData.data()).toEqual({
 			a: {
 				projectId: 'test-project',
 				path: 'a/a'

@@ -1,6 +1,7 @@
 import { Batch } from './Batch'
 import { Model } from './Model'
 import { DocumentType, Documentable } from './Documentable'
+import { ModelType } from './Modelable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
 import { firestore, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, Transaction } from './index'
@@ -52,9 +53,9 @@ export class Doc extends Model implements DocumentType {
 		return model
 	}
 
-	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | DocumentReference): T {
+	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | DocumentReference, option: ModelType.Option = { convertDocumentReference: false }): T {
 		const model = new this(reference) as T
-		model._set(data)
+		model._set(data, option)
 		return model
 	}
 
@@ -68,8 +69,8 @@ export class Doc extends Model implements DocumentType {
 		return model
 	}
 
-	protected _set(data: { [feild: string]: any }) {
-		super._set(data)
+	protected _set(data: { [feild: string]: any }, option: ModelType.Option = { convertDocumentReference: false }) {
+		super._set(data, option)
 		this.createdAt = data["createdAt"] || Timestamp.now()
 		this.updatedAt = data["updatedAt"] || Timestamp.now()
 	}
@@ -191,4 +192,3 @@ export class Doc extends Model implements DocumentType {
 		return Reflect.getMetadata(SubCollectionSymbol, this) || []
 	}
 }
-
