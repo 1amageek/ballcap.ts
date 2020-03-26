@@ -375,6 +375,7 @@ describe("Model Fields", () => {
 				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}
 		})
+		expect(doc.f instanceof File).toEqual(true)
 	}, 100)
 
 	test("file?", async () => {
@@ -393,6 +394,7 @@ describe("Model Fields", () => {
 				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}
 		})
+		expect(doc.f instanceof File).toEqual(true)
 		doc.f = undefined
 		expect(doc.f).toEqual(null)
 		expect(doc.data()).toEqual({
@@ -416,6 +418,7 @@ describe("Model Fields", () => {
 				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}
 		})
+		expect(doc.f instanceof File).toEqual(true)
 	}, 100)
 
 	test("file[]", async () => {
@@ -452,6 +455,9 @@ describe("Model Fields", () => {
 				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}]
 		})
+		doc.f?.forEach(f => {
+			expect(f instanceof File).toEqual(true)
+		})
 		doc.f = undefined
 		expect(doc.f).toEqual(null)
 		expect(doc.data()).toEqual({
@@ -461,7 +467,7 @@ describe("Model Fields", () => {
 
 	test("file[]!", async () => {
 		class Doc extends Model {
-			@Field f?: File[] = [File.from({ mimeType: "", path: "", url: null, metadata: {} })]
+			@Field f!: File[]
 		}
 		const data = {
 			f: [{
@@ -474,6 +480,9 @@ describe("Model Fields", () => {
 			"f": [{
 				"mimeType": "mimeType", "path": "path", "url": null, "metadata": {}
 			}]
+		})
+		doc.f.forEach(f => {
+			expect(f instanceof File).toEqual(true)
 		})
 	}, 100)
 
@@ -493,6 +502,8 @@ describe("Model Fields", () => {
 		const doc: Doc = Doc.from(data)
 		expect(doc.model).toEqual(Sub.from({ s: "s" }))
 		expect(doc.model.s).toEqual("s")
+		expect(doc.model instanceof Model).toEqual(true)
+		expect(doc.model instanceof Sub).toEqual(true)
 	}, 100)
 
 	test("model?", async () => {
@@ -511,6 +522,8 @@ describe("Model Fields", () => {
 		const doc: Doc = Doc.from(data)
 		expect(doc.model).toEqual(Sub.from({ s: "s" }))
 		expect(doc.model!.s).toEqual("s")
+		expect(doc.model instanceof Model).toEqual(true)
+		expect(doc.model instanceof Sub).toEqual(true)
 		doc.model = undefined
 		expect(doc.model).toEqual(null)
 	}, 100)
@@ -531,6 +544,8 @@ describe("Model Fields", () => {
 		const doc: Doc = Doc.from(data)
 		expect(doc.model).toEqual(Sub.from({ s: "s" }))
 		expect(doc.model!.s).toEqual("s")
+		expect(doc.model instanceof Model).toEqual(true)
+		expect(doc.model instanceof Sub).toEqual(true)
 	}, 100)
 
 	test("model[]", async () => {
@@ -549,6 +564,10 @@ describe("Model Fields", () => {
 		const doc: Doc = Doc.from(data)
 		expect(doc.model[0]).toEqual(Sub.from({ s: "s" }))
 		expect(doc.model[0].s).toEqual("s")
+		doc.model.forEach(model => {
+			expect(model instanceof Model).toEqual(true)
+			expect(model instanceof Sub).toEqual(true)
+		})
 	}, 100)
 
 	test("model[]?", async () => {
@@ -567,6 +586,10 @@ describe("Model Fields", () => {
 		const doc: Doc = Doc.from(data)
 		expect(doc.model![0]).toEqual(Sub.from({ s: "s" }))
 		expect(doc.model![0].s).toEqual("s")
+		doc.model?.forEach(model => {
+			expect(model instanceof Model).toEqual(true)
+			expect(model instanceof Sub).toEqual(true)
+		})
 		doc.model = undefined
 		expect(doc.model).toEqual(null)
 	}, 100)
@@ -577,7 +600,7 @@ describe("Model Fields", () => {
 		}
 		class Doc extends Model {
 			@Codable(Sub)
-			@Field model?: Sub[] = [new Sub()]
+			@Field model!: Sub[]
 		}
 		const data = {
 			model: [{
@@ -587,5 +610,136 @@ describe("Model Fields", () => {
 		const doc: Doc = Doc.from(data)
 		expect(doc.model![0]).toEqual(Sub.from({ s: "s" }))
 		expect(doc.model![0].s).toEqual("s")
+		doc.model.forEach(model => {
+			expect(model instanceof Model).toEqual(true)
+			expect(model instanceof Sub).toEqual(true)
+		})
+	}, 100)
+
+	test("Inherited init", async () => {
+		class GrandChild extends Model {
+			@Field s: string = "a"
+			@Field n: number = 0
+			@Field o: any = { "k": "v" }
+			@Field array: string[] = ["a", "b"]
+		}
+
+		class Child extends Model {
+			@Field s: string = "a"
+			@Field n: number = 0
+			@Field o: any = { "k": "v" }
+			@Field array: string[] = ["a", "b"]
+			@Field grandChild: GrandChild = new GrandChild()
+		}
+		class Parent extends Model {
+			@Field s: string = "a"
+			@Field n: number = 0
+			@Field o: any = { "k": "v" }
+			@Field array: string[] = ["a", "b"]
+			@Field child: Child = new Child()
+		}
+		class Inherited extends Parent { }
+		const doc = new Parent()
+		expect(doc.s).toEqual("a")
+		expect(doc.n).toEqual(0)
+		expect(doc.o).toEqual({ "k": "v" })
+		expect(doc.array).toEqual(["a", "b"])
+		expect(doc.child instanceof Model).toEqual(true)
+		expect(doc.child.s).toEqual("a")
+		expect(doc.child.n).toEqual(0)
+		expect(doc.child.o).toEqual({ "k": "v" })
+		expect(doc.child.grandChild instanceof Model).toEqual(true)
+		expect(doc.child.array).toEqual(["a", "b"])
+		expect(doc.child.grandChild.s).toEqual("a")
+		expect(doc.child.grandChild.n).toEqual(0)
+		expect(doc.child.grandChild.o).toEqual({ "k": "v" })
+		expect(doc.child.grandChild.array).toEqual(["a", "b"])
+		const inheritedDoc = new Inherited()
+		expect(inheritedDoc.s).toEqual("a")
+		expect(inheritedDoc.n).toEqual(0)
+		expect(inheritedDoc.o).toEqual({ "k": "v" })
+		expect(inheritedDoc.array).toEqual(["a", "b"])
+		expect(inheritedDoc.child.s).toEqual("a")
+		expect(inheritedDoc.child.n).toEqual(0)
+		expect(inheritedDoc.child.o).toEqual({ "k": "v" })
+		expect(inheritedDoc.child.array).toEqual(["a", "b"])
+		expect(inheritedDoc.child.grandChild.s).toEqual("a")
+		expect(inheritedDoc.child.grandChild.n).toEqual(0)
+		expect(inheritedDoc.child.grandChild.o).toEqual({ "k": "v" })
+		expect(inheritedDoc.child.grandChild.array).toEqual(["a", "b"])
+	}, 100)
+
+	test("Inherited !", async () => {
+		class GrandChild extends Model {
+			@Field s!: string
+			@Field n!: number
+			@Field o!: any
+			@Field array!: string[]
+		}
+		class Child extends Model {
+			@Field s!: string
+			@Field n!: number
+			@Field o!: any
+			@Field array!: string[]
+			@Codable(GrandChild)
+			@Field grandChild!: GrandChild
+		}
+		class Parent extends Model {
+			@Field s!: string
+			@Field n!: number
+			@Field o!: any
+			@Field array!: string[]
+			@Codable(Child)
+			@Field child!: Child
+		}
+		class Inherited extends Parent { }
+		const data = {
+			s: "a",
+			n: 0,
+			o: { "k": "v" },
+			array: ["0", "1", "2"],
+			child: {
+				s: "a",
+				n: 0,
+				o: { "k": "v" },
+				array: ["0", "1", "2"],
+				grandChild: {
+					s: "a",
+					n: 0,
+					o: { "k": "v" },
+					array: ["0", "1", "2"]
+				}
+			}
+		}
+		const doc: Parent = Parent.from(data)
+		expect(doc.s).toEqual("a")
+		expect(doc.n!).toEqual(0)
+		expect(doc.o).toEqual({ "k": "v" })
+		expect(doc.array).toEqual(["0", "1", "2"])
+		expect(doc.child instanceof Child).toEqual(true)
+		expect(doc.child.s).toEqual("a")
+		expect(doc.child.n).toEqual(0)
+		expect(doc.child.o).toEqual({ "k": "v" })
+		expect(doc.child.array).toEqual(["0", "1", "2"])
+		expect(doc.child.grandChild instanceof Model).toEqual(true)
+		expect(doc.child.grandChild.s).toEqual("a")
+		expect(doc.child.grandChild.n).toEqual(0)
+		expect(doc.child.grandChild.o).toEqual({ "k": "v" })
+		expect(doc.child.grandChild.array).toEqual(["0", "1", "2"])
+		const inheritedDoc: Inherited = Inherited.from(data)
+		expect(inheritedDoc.s).toEqual("a")
+		expect(inheritedDoc.n).toEqual(0)
+		expect(inheritedDoc.o).toEqual({ "k": "v" })
+		expect(inheritedDoc.array).toEqual(["0", "1", "2"])
+		expect(inheritedDoc.child instanceof Model).toEqual(true)
+		expect(inheritedDoc.child.s).toEqual("a")
+		expect(inheritedDoc.child.n).toEqual(0)
+		expect(inheritedDoc.child.o).toEqual({ "k": "v" })
+		expect(inheritedDoc.child.array).toEqual(["0", "1", "2"])
+		expect(inheritedDoc.child.grandChild instanceof Model).toEqual(true)
+		expect(inheritedDoc.child.grandChild.s).toEqual("a")
+		expect(inheritedDoc.child.grandChild.n).toEqual(0)
+		expect(inheritedDoc.child.grandChild.o).toEqual({ "k": "v" })
+		expect(inheritedDoc.child.grandChild.array).toEqual(["0", "1", "2"])
 	}, 100)
 })
