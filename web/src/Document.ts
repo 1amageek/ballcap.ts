@@ -35,6 +35,14 @@ export class Doc extends Model implements DocumentType {
 		return firestore.collection(this.modelName())
 	}
 
+	public static documentReference(id: string | undefined) {
+		if (id) {
+			return this.collectionReference().doc(id)
+		} else {
+			return this.collectionReference().doc()
+		}
+	}
+
 	public modelName(): string {
 		return (this.constructor as any).modelName()
 	}
