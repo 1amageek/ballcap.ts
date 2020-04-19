@@ -224,12 +224,47 @@ export class Address extends Model {
   @Field country?: string
 }
 
+export class Shipping extends Doc {
+  @Codable(Address)
+  @Field address?: Address
+  @Field phone?: string
+}
+
 export class User extends Doc {
   @Field name?: string
   @Field thumbnailImage?: File
   @Codable(Address)
   @Field address: Address[] = []
+  @Codable(Shipping, true)
+  @Field shipping?: Shipping
 }
+```
+
+### Codable
+A Document in Ballcap can have nested Documents and Models. Use Cadable to provide `type` to Ballcap
+
+```typescript
+@Codable(Address)
+@Field address: Address[] = []
+```
+
+If the nested object is a Document, it can have the following structure because the Document contains an ID.
+
+```typescript
+{
+  id: "shipping id",
+  path: "shipping path",
+  data: {
+    // shipping data
+  }
+}
+```
+
+If you want to keep the structure, set the second argument to Codable to true. By default, it is false. If false, only the data is retained.
+
+```typescript
+@Codable(Shipping, true)
+@Field shipping?: Shipping
 ```
 
 ### SubCollecion
