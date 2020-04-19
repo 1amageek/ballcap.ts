@@ -44,7 +44,7 @@ export class Model implements ModelType {
 
 	protected _data: { [feild: string]: any } = {}
 
-	protected _set(data: { [feild: string]: any }, option: Model.Option = { convertDocumentReference: false }) {
+	protected _set(data: { [feild: string]: any }, option?: Model.Option) {
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const value = data[codingKey]
@@ -56,14 +56,14 @@ export class Model implements ModelType {
 		}
 	}
 
-	public data(option: Model.Option = { convertDocumentReference: false }): DocumentData {
+	public data(option?: Model.Option): DocumentData {
 		let data: { [feild: string]: any } = {}
 		for (const field of this.fields()) {
 			const codingKey = this.codingKeys()[field]
 			const descriptor = Object.getOwnPropertyDescriptor(this, field)
 			if (descriptor && descriptor.get) {
 				const value = descriptor.get()
-				data[codingKey] = this._encode(value, option)
+				data[codingKey] = this._encode(value, field, option)
 			} else {
 				data[codingKey] = null
 			}
@@ -71,8 +71,34 @@ export class Model implements ModelType {
 		return data
 	}
 
-	protected _decode(value: any, key: string, option: Model.Option): any {
-		const convertDocumentReference = option.convertDocumentReference || false
+	protected _encode(value: any, key: string, option?: Model.Option): any {
+		const convertDocumentReference = option?.convertDocumentReference || false
+		if (File.is(value)) {
+			return value.data(option)
+		} else if (value instanceof Model) {
+			return value.data(option)
+		} else if (value instanceof Array) {
+			let container = []
+			for (const i of value) {
+				container.push(this._encode(i, key, option))
+			}
+			return container
+		} else if (isDocumentReference(value) && convertDocumentReference) {
+			const ref: DocumentReference = (value as DocumentReference)
+			const firestore = ref.firestore as any
+			const projectId = firestore._projectId || firestore.app.options.projectId
+			return {
+				projectId: projectId,
+				path: ref.path
+			}
+		} else {
+			return value
+		}
+	}
+
+
+	protected _decode(value: any, key: string, option?: Model.Option): any {
+		const convertDocumentReference = option?.convertDocumentReference || false
 		if (File.is(value)) {
 			return File.from(value)
 		} else if (value instanceof Array) {
@@ -87,36 +113,11 @@ export class Model implements ModelType {
 			const codingKeys = Reflect.getMetadata(CodableSymbol, this) || {}
 			const modelType = codingKeys[key]
 			if (modelType) {
-				const model = new modelType()
+				const model = new modelType.type()
 				model._set(value, option)
 				return model
 			} else {
 				return value
-			}
-		} else {
-			return value
-		}
-	}
-
-	protected _encode(value: any, option: Model.Option): any {
-		const convertDocumentReference = option.convertDocumentReference || false
-		if (File.is(value)) {
-			return value.data(option)
-		} else if (value instanceof Model) {
-			return value.data(option)
-		} else if (value instanceof Array) {
-			let container = []
-			for (const i of value) {
-				container.push(this._encode(i, option))
-			}
-			return container
-		} else if (isDocumentReference(value) && convertDocumentReference) {
-			const ref: DocumentReference = (value as DocumentReference)
-			const firestore = ref.firestore as any
-			const projectId = firestore._projectId || firestore.app.options.projectId
-			return {
-				projectId: projectId,
-				path: ref.path
 			}
 		} else {
 			return value

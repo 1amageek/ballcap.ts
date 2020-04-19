@@ -68,13 +68,13 @@ export class Doc extends Model implements DocumentType {
 		return model
 	}
 
-	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | DocumentReference, option: Doc.Option = { convertDocumentReference: false, convertDocument: false }): T {
+	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | DocumentReference, option?: Doc.Option): T {
 		const model = new this(reference) as T
 		model._set(data, option)
 		return model
 	}
 
-	public static fromSnapshot<T extends Doc>(snapshot: DocumentSnapshot, option: Doc.Option = { convertDocumentReference: false, convertDocument: false }): T {
+	public static fromSnapshot<T extends Doc>(snapshot: DocumentSnapshot, option?: Doc.Option): T {
 		const model = new this(snapshot.ref) as T
 		model.snapshot = snapshot
 		const snapshotOption: SnapshotOptions = {
@@ -87,7 +87,7 @@ export class Doc extends Model implements DocumentType {
 		return model
 	}
 
-	protected _set(data: { [feild: string]: any }, option: Model.Option = { convertDocumentReference: false }) {
+	protected _set(data: { [feild: string]: any }, option?: Model.Option) {
 		super._set(data, option)
 		this.createdAt = data["createdAt"] || Timestamp.now()
 		this.updatedAt = data["updatedAt"] || Timestamp.now()
@@ -123,47 +123,49 @@ export class Doc extends Model implements DocumentType {
 		}
 	}
 
-	public data(option: Doc.Option = { convertDocumentReference: false, convertDocument: false }): DocumentData {
-		if (option.convertDocument) {
-			let data: { [feild: string]: any } = {}
-			for (const field of this.fields()) {
-				const codingKey = this.codingKeys()[field]
-				const descriptor = Object.getOwnPropertyDescriptor(this, field)
-				if (descriptor && descriptor.get) {
-					const value = descriptor.get()
-					data[codingKey] = this._encode(value, option)
-				} else {
-					data[codingKey] = null
+	public data(option?: Doc.Option): DocumentData {
+		let data: { [feild: string]: any } = {}
+		for (const field of this.fields()) {
+			const codingKey = this.codingKeys()[field]
+			const descriptor = Object.getOwnPropertyDescriptor(this, field)
+			if (descriptor && descriptor.get) {
+				const value = descriptor.get()
+				data[codingKey] = this._encode(value, field, option)
+			} else {
+				data[codingKey] = null
+			}
+		}
+		return data
+	}
+
+	protected _encode(value: any, key: string, option?: Doc.Option): any {
+		if (value instanceof Doc) {
+			const codingKeys = Reflect.getMetadata(CodableSymbol, this) || {}
+			const modelType = codingKeys[key]
+			if (modelType) {
+				const convertDocument = option?.convertDocument || modelType.convert || false
+				if (convertDocument) {
+					return {
+						id: value.id,
+						path: value.path,
+						data: value.data(option)
+					}
 				}
 			}
-			return data
-		} else {
-			return super.data(option)
 		}
+
+		return super._encode(value, key, option)
 	}
 
-	protected _encode(value: any, option: Doc.Option): any {
-		const convertDocument = option.convertDocument || false
-		if (value instanceof Doc && convertDocument) {
-			return {
-				id: value.id,
-				path: value.path,
-				data: value.data(option)
-			}
-		} else {
-			return super._encode(value, option)
-		}
-	}
-
-	protected _decode(value: any, key: string, option: Doc.Option): any {
-		const convertDocument = option.convertDocument || false
-		if (Doc.is(value) && convertDocument) {
+	protected _decode(value: any, key: string, option?: Doc.Option): any {
+		if (Doc.is(value)) {
 			const codingKeys = Reflect.getMetadata(CodableSymbol, this) || {}
 			const modelType = codingKeys[key]
 			if (modelType) {
 				const ref = App.shared().firestore().doc(value.path)
-				const model = new modelType(ref)
-				model._set(value.data, option)
+				const model = new modelType.type(ref)
+				const convertDocument = option?.convertDocument || modelType.convert || false
+				model._set(value.data, { ...option, convertDocument })
 				return model
 			} else {
 				return value
@@ -172,7 +174,6 @@ export class Doc extends Model implements DocumentType {
 			return super._decode(value, key, option)
 		}
 	}
-
 
 	/**
 	 * constructor
