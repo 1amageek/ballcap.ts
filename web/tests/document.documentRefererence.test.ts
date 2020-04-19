@@ -21,7 +21,7 @@ describe("DocumentReference", () => {
 			@Field a: firebase.firestore.DocumentReference = app.firestore().doc('a/a')
 			@Field b: firebase.firestore.DocumentReference = app.firestore().doc('a/b')
 			@Codable(Sub)
-			@Field s: Sub = new Sub()
+			@Field s: Sub = new Sub('subid')
 		}
 		const doc: Moc = new Moc()
 		expect(doc.data()).toEqual({
@@ -49,6 +49,43 @@ describe("DocumentReference", () => {
 				b: {
 					projectId: 'test-project',
 					path: 'a/b'
+				}
+			}
+		})
+
+		expect(doc.data({ convertDocument: true })).toEqual({
+			a: app.firestore().doc('a/a'),
+			b: app.firestore().doc('a/b'),
+			s: {
+				id: 'subid',
+				path: 'sub/subid',
+				data: {
+					a: app.firestore().doc('a/a'),
+					b: app.firestore().doc('a/b'),
+				}
+			}
+		})
+		expect(doc.data({ convertDocumentReference: true, convertDocument: true })).toEqual({
+			a: {
+				projectId: 'test-project',
+				path: 'a/a'
+			},
+			b: {
+				projectId: 'test-project',
+				path: 'a/b'
+			},
+			s: {
+				id: 'subid',
+				path: 'sub/subid',
+				data: {
+					a: {
+						projectId: 'test-project',
+						path: 'a/a'
+					},
+					b: {
+						projectId: 'test-project',
+						path: 'a/b'
+					}
 				}
 			}
 		})
@@ -205,6 +242,44 @@ describe("DocumentReference", () => {
 				}
 			}
 		})
+		const convertedDocFromData: Moc = Moc.fromData({
+			a: {
+				projectId: 'test-project',
+				path: 'a/a'
+			},
+			b: {
+				projectId: 'test-project',
+				path: 'a/b'
+			},
+			s: {
+				id: 'id',
+				path: 'sub/id',
+				data: {
+					a: {
+						projectId: 'test-project',
+						path: 'a/a'
+					},
+					b: {
+						projectId: 'test-project',
+						path: 'a/b'
+					}
+				}
+			}
+		}, undefined, { convertDocumentReference: true, convertDocument: true })
+
+		expect(convertedDocFromData.data()).toEqual({
+			a: app.firestore().doc('a/a'),
+			b: app.firestore().doc('a/b'),
+			s: {
+				a: app.firestore().doc('a/a'),
+				b: app.firestore().doc('a/b'),
+			}
+		})
+
+		expect(convertedDocFromData.s.id).toEqual('id')
+
+		expect(convertedDocFromData.s.path).toEqual('sub/id')
+
 	}, 100)
 
 	afterAll(() => {

@@ -1,10 +1,18 @@
+import { App } from './App'
 import { Batch } from './Batch'
 import { Model } from './Model'
 import { DocumentType, Documentable } from './Documentable'
+import { CodableSymbol } from './Codable'
 import { Collection } from './Collection'
 import { SubCollectionSymbol } from './SubCollection'
-import { firestore, DocumentReference, DocumentSnapshot, Timestamp, CollectionReference, SnapshotOptions, Transaction } from './index'
+import { firestore, DocumentReference, SnapshotOptions, DocumentData, DocumentSnapshot, Timestamp, CollectionReference, Transaction } from './index'
 import "reflect-metadata"
+
+export namespace Doc {
+	export interface Option extends Model.Option {
+		convertDocument?: boolean
+	}
+}
 
 export class Doc extends Model implements DocumentType {
 
@@ -60,21 +68,21 @@ export class Doc extends Model implements DocumentType {
 		return model
 	}
 
-	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | DocumentReference, option: Model.Option = { convertDocumentReference: false }): T {
+	public static fromData<T extends Doc>(data: { [feild: string]: any }, reference?: string | DocumentReference, option: Doc.Option = { convertDocumentReference: false, convertDocument: false }): T {
 		const model = new this(reference) as T
 		model._set(data, option)
 		return model
 	}
 
-	public static fromSnapshot<T extends Doc>(snapshot: DocumentSnapshot): T {
+	public static fromSnapshot<T extends Doc>(snapshot: DocumentSnapshot, option: Doc.Option = { convertDocumentReference: false, convertDocument: false }): T {
 		const model = new this(snapshot.ref) as T
 		model.snapshot = snapshot
-		const option: SnapshotOptions = {
+		const snapshotOption: SnapshotOptions = {
 			serverTimestamps: "estimate"
 		}
-		const data = snapshot.data(option)
+		const data = snapshot.data(snapshotOption)
 		if (data) {
-			model._set(data)
+			model._set(data, option)
 		}
 		return model
 	}
@@ -103,6 +111,68 @@ export class Doc extends Model implements DocumentType {
 		}
 		Object.defineProperty(this, key, descriptor)
 	}
+
+	public static is(arg: { [key: string]: any }): boolean {
+		if (arg instanceof Object) {
+			return Object.keys(arg).length === 3 &&
+				arg.hasOwnProperty('id') &&
+				arg.hasOwnProperty('path') &&
+				arg.hasOwnProperty('data')
+		} else {
+			return false
+		}
+	}
+
+	public data(option: Doc.Option = { convertDocumentReference: false, convertDocument: false }): DocumentData {
+		if (option.convertDocument) {
+			let data: { [feild: string]: any } = {}
+			for (const field of this.fields()) {
+				const codingKey = this.codingKeys()[field]
+				const descriptor = Object.getOwnPropertyDescriptor(this, field)
+				if (descriptor && descriptor.get) {
+					const value = descriptor.get()
+					data[codingKey] = this._encode(value, option)
+				} else {
+					data[codingKey] = null
+				}
+			}
+			return data
+		} else {
+			return super.data(option)
+		}
+	}
+
+	protected _encode(value: any, option: Doc.Option): any {
+		const convertDocument = option.convertDocument || false
+		if (value instanceof Doc && convertDocument) {
+			return {
+				id: value.id,
+				path: value.path,
+				data: value.data(option)
+			}
+		} else {
+			return super._encode(value, option)
+		}
+	}
+
+	protected _decode(value: any, key: string, option: Doc.Option): any {
+		const convertDocument = option.convertDocument || false
+		if (Doc.is(value) && convertDocument) {
+			const codingKeys = Reflect.getMetadata(CodableSymbol, this) || {}
+			const modelType = codingKeys[key]
+			if (modelType) {
+				const ref = App.shared().firestore().doc(value.path)
+				const model = new modelType(ref)
+				model._set(value.data, option)
+				return model
+			} else {
+				return value
+			}
+		} else {
+			return super._decode(value, key, option)
+		}
+	}
+
 
 	/**
 	 * constructor
