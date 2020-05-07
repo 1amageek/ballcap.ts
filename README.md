@@ -92,25 +92,7 @@ react-scripts eject
 
 #### Edit `webpack.config.js`
 
-```JavaScrict
-    
-    // Replace module
-    module: {
-      strictExportPresence: true,
-      rules: [
-        { parser: { requireEnsure: false } },
-        {
-          oneOf: [
-            {
-              test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: paths.appSrc,
-              loader: require.resolve('ts-loader')
-            }
-          ],
-        },
-      ],
-    },
-```
+https://gist.github.com/1amageek/184a6054f00f1a722d37f7b4cba406a0
 
 #### Edit `tsconfig.json`
 
