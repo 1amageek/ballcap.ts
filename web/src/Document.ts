@@ -145,11 +145,7 @@ export class Doc extends Model implements DocumentType {
 			if (modelType) {
 				const convertDocument = option?.convertDocument || modelType.convert || false
 				if (convertDocument) {
-					return {
-						id: value.id,
-						path: value.path,
-						data: value.data(option)
-					}
+					return value.convert(option)
 				}
 			}
 		}
@@ -172,6 +168,14 @@ export class Doc extends Model implements DocumentType {
 			}
 		} else {
 			return super._decode(value, key, option)
+		}
+	}
+
+	public convert(option?: Doc.Option) {
+		return {
+			id: this.id,
+			path: this.path,
+			data: this.data(option)
 		}
 	}
 
