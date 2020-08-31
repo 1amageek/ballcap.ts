@@ -4,13 +4,13 @@
   "publishConfig": {
     "access": "public"
   },
-  "version": "1.2.4",
+  "version": "1.2.5",
   "scripts": {
     "lint": "./node_modules/.bin/tslint -p tslint.json",
     "build": "./node_modules/.bin/tsc -d",
-		"prepare": "npm run build",
-		"test:setup": "firebase setup:emulators:firestore",
-		"serve:firestore": "firebase serve --only firestore",
+    "prepare": "npm run build",
+    "test:setup": "firebase setup:emulators:firestore",
+    "serve:firestore": "firebase serve --only firestore",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase experimental:functions:shell",
     "start": "npm run shell",
@@ -47,17 +47,17 @@
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
-    "@firebase/testing": "^0.17.1",
-    "@types/jest": "^25.1.4",
+    "@firebase/testing": "^0.20.11",
+    "@types/jest": "^25.2.3",
     "@types/node": "^12.12.31",
-    "firebase": "^7.12.0",
-    "jest": "^25.1.0",
-    "ts-jest": "^25.2.1",
+    "firebase": "^7.19.1",
+    "jest": "^25.5.4",
+    "ts-jest": "^25.5.1",
     "tslint": "^6.0.0",
-    "typescript": "^3.8.3"
+    "typescript": "^4.0.2"
   },
   "peerDependencies": {
-    "firebase": "^7.12.0"
+    "firebase": "^7.19.1"
   },
   "resolutions": {
     "**/gaxios": "1.8.3"
