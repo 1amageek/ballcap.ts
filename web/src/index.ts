@@ -26,8 +26,8 @@ import { Batch } from './Batch'
 export { Codable, Field, File, SubCollection, Model, Doc, Collection, Batch }
 
 export let firestore: firebase.firestore.Firestore
-export const initialize = (app: firebase.app.App | any) => {
-	firestore = app.firestore()
+export const initialize = (app: firebase.app.App | any, _firestore?: firebase.firestore.Firestore) => {
+	firestore = _firestore ?? app.firestore()
 	App.shared().set(app)
 }
 
