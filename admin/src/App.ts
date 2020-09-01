@@ -1,22 +1,21 @@
 import * as firebase from 'firebase-admin'
 
 export class App {
-	private static app: App;
+	private static app: App
 	private constructor() { }
 	static shared() {
 			if (!App.app) {
-				App.app = new App();
+				App.app = new App()
 			}
-			return App.app;
+			return App.app
 	}
 
 	firebaseApp: firebase.app.App | any
 
-	set(app: firebase.app.App | any) {
-		this.firebaseApp = app
-	}
+	firestore!: firebase.firestore.Firestore
 
-	firestore() {
-		return this.firebaseApp.firestore()
+	set(app: firebase.app.App | any, firestore: firebase.firestore.Firestore) {
+		this.firebaseApp = app
+		this.firestore = firestore ?? app.firestore()
 	}
 }

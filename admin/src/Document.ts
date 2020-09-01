@@ -155,7 +155,7 @@ export class Doc extends Model implements DocumentType {
 			const codingKeys = Reflect.getMetadata(CodableSymbol, this) || {}
 			const modelType = codingKeys[key]
 			if (modelType) {
-				const ref = App.shared().firestore().doc(value.path)
+				const ref = App.shared().firestore.doc(value.path)
 				const model = new modelType.type(ref)
 				const convertDocument = option?.convertDocument || modelType.convert || false
 				model._set(value.data, { ...option, convertDocument })

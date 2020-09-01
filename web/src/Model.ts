@@ -108,7 +108,7 @@ export class Model implements ModelType {
 			}
 			return container
 		} else if (isDocumentReference(value) && convertDocumentReference) {
-			return App.shared().firestore().doc(value.path)
+			return App.shared().firestore.doc(value.path)
 		} else if (value instanceof Object) {
 			const codingKeys = Reflect.getMetadata(CodableSymbol, this) || {}
 			const modelType = codingKeys[key]
