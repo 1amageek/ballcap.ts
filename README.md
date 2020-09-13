@@ -223,7 +223,7 @@ export class User extends Doc {
 ```
 
 ### Codable
-A Document in Ballcap can have nested Documents and Models. Use Cadable to provide `type` to Ballcap
+A Document in Ballcap can have nested Documents and Models. Use Codable to provide `type` to Ballcap
 
 ```typescript
 @Codable(Address)
