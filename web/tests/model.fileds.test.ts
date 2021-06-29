@@ -1,5 +1,5 @@
 import "reflect-metadata"
-import * as firebase from 'firebase'
+import firebase from 'firebase'
 import { Model } from '../src/Model'
 import { File } from '../src/File'
 import { Field } from '../src/Field'

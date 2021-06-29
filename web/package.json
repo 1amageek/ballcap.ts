@@ -10,7 +10,7 @@
     "build": "./node_modules/.bin/tsc -d",
     "prepare": "npm run build",
     "test:setup": "firebase setup:emulators:firestore",
-    "serve:firestore": "firebase serve --only firestore",
+    "serve:firestore": "firebase emulators:start --only firestore",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase experimental:functions:shell",
     "start": "npm run shell",
@@ -48,17 +48,17 @@
   },
   "devDependencies": {
     "@firebase/testing": "^0.20.11",
-    "@types/jest": "^25.2.3",
-    "@types/node": "^12.12.31",
-    "firebase": "^7.19.1",
-    "jest": "^25.5.4",
-    "ts-jest": "^25.5.1",
-    "tslint": "^6.0.0",
-    "typescript": "^4.0.2"
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.12.5",
+    "firebase": "^8.6.8",
+    "jest": "^27.0.6",
+    "ts-jest": "^27.0.3",
+    "tslint": "^6.1.3",
+    "typescript": "^4.3.4"
   },
   "peerDependencies": {
-    "firebase": "^7.19.1"
-  },
+		"firebase": "^8.6.8"
+	},
   "resolutions": {
     "**/gaxios": "1.8.3"
   },

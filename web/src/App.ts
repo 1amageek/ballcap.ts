@@ -1,13 +1,13 @@
-import * as firebase from 'firebase'
+import firebase from 'firebase'
 
 export class App {
 	private static app: App
 	private constructor() { }
 	static shared() {
-			if (!App.app) {
-				App.app = new App()
-			}
-			return App.app
+		if (!App.app) {
+			App.app = new App()
+		}
+		return App.app
 	}
 
 	firebaseApp: firebase.app.App | any
