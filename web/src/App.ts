@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase/compat'
 
 export class App {
 	private static app: App
