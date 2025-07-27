@@ -1,10 +1,9 @@
-import { DocumentType } from './Documentable'
-import "reflect-metadata"
+import "reflect-metadata";
 
-export const SubCollectionSymbol = Symbol("SubCollection")
+export const SubCollectionSymbol = Symbol("SubCollection");
 
-export const SubCollection = <T extends DocumentType>(target: T, fieldKey: string) => {
-	const fields = Reflect.getMetadata(SubCollectionSymbol, target) || []
-	fields.push(fieldKey)
-	Reflect.defineMetadata(SubCollectionSymbol, fields, target)
+export function SubCollection(target: any, fieldKey: string): void {
+  const fields = Reflect.getMetadata(SubCollectionSymbol, target) || [];
+  fields.push(fieldKey);
+  Reflect.defineMetadata(SubCollectionSymbol, fields, target);
 }

@@ -142,7 +142,7 @@ export class Model implements ModelType {
 				if (this._data) {
 					this._data[key] = newValue
 				} else {
-					fail(`[Ballcap: Document] This document has not data. key: ${key} value: ${newValue}`)
+					throw new Error(`[Ballcap: Document] This document has not data. key: ${key} value: ${newValue}`)
 				}
 			}
 		}

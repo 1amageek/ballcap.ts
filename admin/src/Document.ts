@@ -32,7 +32,20 @@ export class Doc extends Model implements DocumentType {
 	}
 
 	public static modelName(): string {
-		return this.toString().split('(' || /s+/)[0].split(' ' || /s+/)[1].toLowerCase()
+		const str = this.toString();
+		const parts = str.split(/[\s(]/);
+
+		// "class ClassName ..." のパターンを期待
+		if (parts.length < 2 || parts[0] !== 'class') {
+			throw new Error(`Unable to extract model name from: ${str}`);
+		}
+
+		const className = parts[1];
+		if (!className) {
+			throw new Error(`Invalid class name extracted from: ${str}`);
+		}
+
+		return className.toLowerCase();
 	}
 
 	public static path(): string {

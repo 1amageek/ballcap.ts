@@ -1,4 +1,4 @@
-import * as firebase from 'firebase-admin'
+import * as firebase from '@firebase/testing'
 import * as Ballcap from "../src/index"
 import { Doc } from '../src/Document'
 import { Collection } from '../src/Collection'
@@ -7,11 +7,11 @@ import { SubCollection } from '../src/SubCollection'
 import { Batch } from '../src/Batch'
 import { } from "reflect-metadata"
 
-const secret = require("./secret.json")
-const app = firebase.initializeApp({
-	credential: firebase.credential.cert(secret)
+const app = firebase.initializeAdminApp({
+	projectId: "test-project"
 })
 Ballcap.initialize(app)
+Ballcap.setFieldValue(firebase.firestore.FieldValue)
 
 
 describe("Collection", () => {
