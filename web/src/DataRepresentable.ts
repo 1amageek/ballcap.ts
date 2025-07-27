@@ -1,5 +1,5 @@
-import { DocumentData } from './index'
+import { DocumentData, Model } from './index'
 
 export interface DataRepresentable {
-	data(): DocumentData
+	data(option?: Model.Option): DocumentData
 }

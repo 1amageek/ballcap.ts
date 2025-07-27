@@ -1,0 +1,7 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.useAliasesForRenames": false,
+  "typescript.tsserver.experimental.enableProjectDiagnostics": false,
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "javascript.implicitProjectConfig.experimentalDecorators": true
+}

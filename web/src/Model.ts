@@ -39,7 +39,18 @@ export class Model implements ModelType {
 	}
 
 	public fields(): string[] {
-		return Reflect.getMetadata(FieldSymbol, this) || []
+		const fields: string[] = [];
+		let proto = Object.getPrototypeOf(this);
+		
+		// プロトタイプチェーンを辿って全てのフィールドを収集
+		while (proto && proto !== Model.prototype) {
+			const ownFields = Reflect.getOwnMetadata(FieldSymbol, proto) || [];
+			fields.push(...ownFields);
+			proto = Object.getPrototypeOf(proto);
+		}
+		
+		// 重複を削除して返す
+		return Array.from(new Set(fields));
 	}
 
 	protected _data: { [feild: string]: any } = {}
@@ -124,7 +135,7 @@ export class Model implements ModelType {
 		}
 	}
 
-	private _defineField(key: string, value?: any) {
+	private _defineField(key: string) {
 		const descriptor: PropertyDescriptor = {
 			enumerable: true,
 			configurable: true,

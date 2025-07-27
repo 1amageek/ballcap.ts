@@ -1,13 +1,17 @@
-import { DataRepresentable } from './DataRepresentable'
-import "reflect-metadata"
+import "reflect-metadata";
+import { DataRepresentable } from "./DataRepresentable";
 
-export const CodableSymbol = Symbol("Codable")
+export const CodableSymbol = Symbol("Codable");
 
-export const Codable = <T extends DataRepresentable>(type: { new(): T }, convert: boolean = false, codingKey?: string, ) => {
-	return <T extends DataRepresentable>(target: T, fieldKey: string) => {
-		const key: string = codingKey || fieldKey
-		const condingKeys = Reflect.getMetadata(CodableSymbol, target) || {}
-		condingKeys[key] = { type , convert}
-		Reflect.defineMetadata(CodableSymbol, condingKeys, target)
-	}
+export function Codable<T extends DataRepresentable>(
+  type: { new (): T },
+  convert: boolean = false,
+  codingKey?: string
+) {
+  return function (target: any, fieldKey: string) {
+    const key = codingKey || fieldKey;
+    const current = Reflect.getMetadata(CodableSymbol, target) || {};
+    current[key] = { type, convert };
+    Reflect.defineMetadata(CodableSymbol, current, target);
+  };
 }

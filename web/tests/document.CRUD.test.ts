@@ -1,13 +1,23 @@
 import "reflect-metadata"
-import * as firebase from '@firebase/testing'
+import firebase from 'firebase/compat/app'
+import 'firebase/compat/firestore'
 import * as Ballcap from "../src/index"
 import { Doc } from '../src/Document'
 import { Field } from '../src/Field'
 import { Batch } from '../src/Batch'
 
-const app = firebase.initializeTestApp({
-	projectId: "test-project"
-})
+// Initialize Firebase app for testing
+let app: firebase.app.App
+if (!firebase.apps.length) {
+	app = firebase.initializeApp({
+		projectId: "test-project"
+	})
+	// Connect to Firestore emulator
+	app.firestore().useEmulator('localhost', 8080)
+} else {
+	app = firebase.app()
+}
+
 Ballcap.initialize(app)
 
 describe("Doc CRUD", () => {
